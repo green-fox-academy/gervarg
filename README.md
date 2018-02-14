@@ -1,4 +1,5 @@
-# Gergely's Repository
+                                                                                               
+# Gergely's Repository  
 
 *Junior Software/Hardware Programming Course ( 12/2/2018 - ??/6/2018 )*
 
@@ -14,7 +15,7 @@
 * Getting familiar with CLI
 * Learning more about Git and GitHub
 * Creating our own repository under Green Fox Academy
-* Created repositories during the workshop
+* Created repositories during the workshop: [Git-lesson-repository](https://github.com/gervarg/git-lesson-repository), [Patchwork repository](https://github.com/gervarg/patchwork), [Hello-World](https://github.com/gervarg/hello-world)
 ### Day 04:
 * 
 
