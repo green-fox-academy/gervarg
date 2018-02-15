@@ -51,6 +51,7 @@ public class VariableMutation {
         if ( f1 > f2 ) {
             System.out.println(true);
         }
+        else System.out.println(false);
 
 
 
@@ -61,6 +62,7 @@ public class VariableMutation {
         if (g1 < (g2*2)) {
             System.out.println(true);
         }
+        else System.out.println(false);
 
 
 
@@ -70,6 +72,7 @@ public class VariableMutation {
         if ( h%11 == 0) {
             System.out.println(true);
         }
+        else System.out.println(false);
 
 
 
@@ -80,6 +83,7 @@ public class VariableMutation {
         if ((i1 >(i2*i2)) && (i1 < (i2*i2*i2))){
             System.out.println(true);
         }
+        else System.out.println(false);
 
 
 
@@ -88,6 +92,7 @@ public class VariableMutation {
         if (j%3 == 0 | j%5 == 0){
             System.out.println(true);
         }
+        else System.out.println(false);
 
 
 
