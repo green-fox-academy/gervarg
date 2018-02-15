@@ -17,7 +17,7 @@
 * Creating our own repository under Green Fox Academy
 * Created repositories during the workshop: [Git-lesson-repository](https://github.com/gervarg/git-lesson-repository), [Patchwork repository](https://github.com/gervarg/patchwork), [Hello-World](https://github.com/gervarg/hello-world)
 ### Day 04:
-* 
+* Learning the basics of programming in Java language *(variables, user input, conditionals, simple arithmetics)*
 
 ### Day 05:
 * 
