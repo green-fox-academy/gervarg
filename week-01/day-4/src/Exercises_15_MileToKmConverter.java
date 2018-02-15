@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class MileToKmConverter {
+public class Exercises_15_MileToKmConverter {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Add the distance in kilometers: ");

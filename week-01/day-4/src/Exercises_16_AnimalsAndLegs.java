@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class AnimalsAndLegs {
+public class Exercises_16_AnimalsAndLegs {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int chickens = scanner.nextInt();

@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class HelloUser {
+public class Exercises_14_HelloUser {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         // Modify this program to greet user instead of the World!

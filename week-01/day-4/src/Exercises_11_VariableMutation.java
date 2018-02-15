@@ -1,4 +1,4 @@
-public class VariableMutation {
+public class Exercises_11_VariableMutation {
     public static void main(String[] args) {
         int a = 3;
         // make it bigger by 10

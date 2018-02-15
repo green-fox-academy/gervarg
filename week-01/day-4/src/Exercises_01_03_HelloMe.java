@@ -1,7 +1,7 @@
-public class HelloMe {
+public class Exercises_01_03_HelloMe {
     public static void main(String[] args) {
-            // Modify this program to greet you instead of the World!
-            System.out.println("Hello, Me!\n");
+        // Modify this program to greet you instead of the World!
+        System.out.println("Hello, Me!\n");
         System.out.println("Humpty Dumpty sat on a wall,");
         System.out.println("Humpty Dumpty had a great fall.");
         System.out.println("All the king's horses and all the king's men");
@@ -16,6 +16,6 @@ public class HelloMe {
         System.out.println("Hello, Martin!");
         System.out.println("Hello, Zita!");
         System.out.println("Hello, Attila!");
-        }
     }
+}
 

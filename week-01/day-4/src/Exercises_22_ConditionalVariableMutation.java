@@ -1,4 +1,4 @@
-public class ConditionalVariableMutation{
+public class Exercises_22_ConditionalVariableMutation{
     public static void main(String[] args){
         double a = 24;
         int out = 0;

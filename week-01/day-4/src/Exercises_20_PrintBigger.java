@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class PrintBigger {
+public class Exercises_20_PrintBigger {
     public static void main(String[] args){
 
         Scanner scanner = new Scanner(System.in);
