@@ -1,6 +1,6 @@
 import java.util.Scanner;
 //still can't figure it out
-public class Exercise_32_DrawDiagonal {
+public class Exercises_32_DrawDiagonal {
 
     public static void main (String[] args ){
         Scanner scanner = new Scanner(System.in);
@@ -22,7 +22,6 @@ public class Exercise_32_DrawDiagonal {
         System.out.println();
         for (int j = 0; j < squareLines2; j++){
             System.out.print("%");
-
             for (int k = 0; k < squareLines2; k++) {
                 System.out.print(" ");
             }
