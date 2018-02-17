@@ -13,6 +13,5 @@ public class Exercises_17_AverageOfInput {
         int d = scanner.nextInt();
         int e = scanner.nextInt();
         System.out.println("Avarage: " +(double)(a+b+c+d+e)/5 + "\nSum: " + (a+b+c+d+e));
-
     }
 }

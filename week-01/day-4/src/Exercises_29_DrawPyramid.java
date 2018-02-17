@@ -15,10 +15,10 @@ public class Exercises_29_DrawPyramid {
         Scanner scanner = new Scanner(System.in);
         int pyramidHeight = scanner.nextInt();
         for (int i = 1; i < pyramidHeight*2; i+=2) {
-            for (int k = 0; k < pyramidHeight-(i/2) ; k++) {
+            for (int j = 0; j < pyramidHeight-(i/2) ; j++) {
                 System.out.print(" ");
             }
-            for (int j = 0; j < i; j++) {
+            for (int k = 0; k < i; k++) {
                 System.out.print("*");
             }
             System.out.println("");

@@ -19,10 +19,7 @@ public class Exercises_28_DrawTriangle {
             {
                 System.out.print("*");
             }
-
            System.out.println("");
         }
-
     }
-
 }

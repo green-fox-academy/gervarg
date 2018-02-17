@@ -17,11 +17,8 @@ public class Exercises_34_ParametricAverage {
         for (int i = 0; i < howManyInputs; i++){
             int askedNumbers = scanner.nextInt();
                 sum += askedNumbers;
-
-
         }
          int average = sum / howManyInputs;
         System.out.println("Sum: " + sum + ", Average: " + average);
-
     }
 }

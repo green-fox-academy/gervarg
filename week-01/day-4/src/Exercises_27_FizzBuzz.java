@@ -16,10 +16,7 @@ public class Exercises_27_FizzBuzz {
             }
             else {
                 System.out.println(i);
-
+            }
         }
-
-        }
-
     }
 }

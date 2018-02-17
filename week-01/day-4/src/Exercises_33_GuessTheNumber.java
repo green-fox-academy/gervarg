@@ -14,7 +14,6 @@ public class Exercises_33_GuessTheNumber {
         // The stried number is lower
         // You found the number: 8
         while ((guessNumber < storedNumber) || (guessNumber > storedNumber)){
-
             if (guessNumber < storedNumber){
                 System.out.println("The stored number is higher");
                 guessNumber = scanner.nextInt();
@@ -23,9 +22,7 @@ public class Exercises_33_GuessTheNumber {
                 System.out.println("The stored number is lower");
                 guessNumber = scanner.nextInt();
             }
-
         }
         System.out.println("You found the number: " + guessNumber);
-
     }
 }
