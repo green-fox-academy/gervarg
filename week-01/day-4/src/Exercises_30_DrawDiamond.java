@@ -6,21 +6,21 @@ public class Exercises_30_DrawDiamond {
         int diamondHeight = scanner.nextInt();
         for (int i = 1; i < diamondHeight; i+=2)
         {
-            for (int k = 0; k < diamondHeight-(i/2) ; k++)
+            for (int j = 0; j < diamondHeight-(i/2) ; j++)
             {
                 System.out.print(" ");
             }
-            for (int j = 0; j < i; j++)
+            for (int k = 0; k < i; k++)
             {
                 System.out.print("*");
             }
             System.out.println("");
         }
         for (int i = diamondHeight-1; i > 0; i-=2){
-            for (int k = diamondHeight; k > diamondHeight-i ; k--){
+            for (int k = -1; k < diamondHeight-(i/2) ; k++){
                 System.out.print(" ");
             }
-            for (int j = diamondHeight; j > i; j--){
+            for (int j = 2; j < i; j++){
                 System.out.print("*");
             }
             System.out.println("");
