@@ -16,19 +16,23 @@ public class Exercises_32_DrawDiagonal {
         // %%%%%
         //
         // The square should have as many lines as the number was
-        for (int i = 0; i<= squareLines2+1; i++){
+        for (int i = 0; i<= squareLines2; i++){
             System.out.print("%");
         }
         System.out.println();
-        for (int j = 0; j < squareLines2; j++){
-            System.out.print("%");
-            for (int k = 0; k < squareLines2; k++) {
-                System.out.print(" ");
+        for (int j=1 ; j<squareLines2; j++){
+            for (int k = 0; k<=squareLines2 ; k++){
+                if (k == 0 || k == j || k == squareLines2){
+                    System.out.print("%");
+                }
+                else {
+                    System.out.print(" ");
+                }
             }
-            System.out.print("%\n");
+            System.out.println();
         }
-        for (int i = 0; i <= squareLines2+1; i++) {
-            System.out.print("%");
-        }
+       for (int i = 0; i <= squareLines2; i++) {
+           System.out.print("%");
+       }
     }
 }

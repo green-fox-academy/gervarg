@@ -13,7 +13,7 @@ public class Exercises_28_DrawTriangle {
         // The triangle should have as many lines as the number was
         Scanner scanner = new Scanner(System.in);
         int triangleHeight = scanner.nextInt();
-        for(int i = 0; i < triangleHeight; i++)
+        for(int i = 1; i <= triangleHeight; i++)
         {
             for (int j = 0; j<i; j++)
             {
