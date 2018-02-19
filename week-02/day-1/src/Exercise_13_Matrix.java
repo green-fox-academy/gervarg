@@ -16,7 +16,7 @@ public class Exercise_13_Matrix {
         int[][] matrix = new int[matrixSize][matrixSize];
         for (int i = 0; i < matrix.length ; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
-                if ( i == j){
+                if ( i == j ){
                     System.out.print("1 ");
                 } else {
                     System.out.print("0 ");
