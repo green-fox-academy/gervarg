@@ -12,27 +12,34 @@ public class Exercise_15_ConnectTheDots {
         // Connect these to get a box: {{10, 10}, {290,  10}, {290, 290}, {10, 290}}
         // Connect these: {{50, 100}, {70, 70}, {80, 90}, {90, 90}, {100, 70},
         // {120, 100}, {85, 130}, {50, 100}}
-        int [][] dots = {{10, 10}, {290,  10}, {290, 290}, {10, 290}};
-        //connectDots(graphics,dots);
-
+        int[][] box = {{10, 10}, {290, 10}, {290, 290}, {10, 290}};
+        int[][] polygon = {{50, 100}, {70, 70}, {80, 90}, {90, 90}, {100, 70},
+                 {120, 100}, {85, 130}, {50, 100}};
+        connectDots(graphics,box);
+        connectDots(graphics,polygon);
 
 
     }
-   /* public static void connectDots(Graphics graphics, int[][] dots){
+
+    public static void connectDots(Graphics graphics, int[][] dots) {
         graphics.setColor(Color.GREEN);
-        int [] arrayX = new int[dots.length];
-        int [] arrayY = new int[dots.length];
-        for (int i = 0; i < dots.length ; i++) {
-            for (int j = 0; j < i ; j++) {
-                arrayX[i] = dots[i][j];
-               // graphics.drawPolygon(dots[j],dots[j],dots.length);
+        for (int i = 0; i < dots.length; i++) {
+            int startX = dots[i][0];
+            int startY = dots[i][1];
+            int endX, endY;
+            if (i == dots.length-1) {
+                endX = dots[0][0];
+                endY = dots[0][1];
+            } else {
+                endX = dots[i + 1][0];
+                endY = dots[i + 1][1];
             }
-
-
-
+            graphics.drawLine(startX, startY, endX, endY);
         }
+    }
 
-    }*/
+
+
 
     // Don't touch the code below
     static int WIDTH = 320;
