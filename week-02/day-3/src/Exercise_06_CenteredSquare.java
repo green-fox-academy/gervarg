@@ -8,7 +8,7 @@ public class Exercise_06_CenteredSquare {
 
     public static void mainDraw(Graphics graphics) {
         // Draw a green 10x10 square to the canvas' center.
-        graphics.drawRect(WIDTH/2,HEIGHT/2,10, 10);
+        graphics.drawRect(WIDTH/2-5,HEIGHT/2-5,10, 10);
 
 
 
