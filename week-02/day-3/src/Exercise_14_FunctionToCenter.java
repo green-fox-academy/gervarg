@@ -20,26 +20,22 @@ public class Exercise_14_FunctionToCenter {
     }
     public static void drawLines(Graphics graphics, int x, int y) {
         graphics.setColor(Color.RED);
-        while (x <= 300){
+        for (int i = 0; i < WIDTH/20; i++) {
+            graphics.drawLine(x,y, WIDTH/2, HEIGHT/2);
             x = x +20;
-            graphics.drawLine(x,y, WIDTH/2, HEIGHT/2);
         }
-        y= 343;
-        x = 0;
-        while ( x <= 300){
-            x += 20;
+        for (int j = 0; j < HEIGHT/20 ; j++) {
             graphics.drawLine(x,y, WIDTH/2, HEIGHT/2);
-        }
-        while( y >= 0){
-            y -= 20;
-            graphics.drawLine(x,y, WIDTH/2, HEIGHT/2);
-        }
-        x = 0;
-        while ( y <= 340){
             y += 20;
-            graphics.drawLine(x,y, WIDTH/2, HEIGHT/2);
         }
-
+        for (int k = 0; k < WIDTH/20 ; k++) {
+            graphics.drawLine(x,y, WIDTH/2, HEIGHT/2);
+            x -= 20;
+        }
+        for (int l = 0; l < HEIGHT/20; l++) {
+            graphics.drawLine(x,y, WIDTH/2, HEIGHT/2);
+            y -= 20;
+        }
 
 
     }
