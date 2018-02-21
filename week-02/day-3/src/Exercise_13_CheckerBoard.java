@@ -14,7 +14,7 @@ public class Exercise_13_CheckerBoard {
         for (int row = 0; row < 8; row++) {
 
             for (int column = 0; column < 8 ; column++) {
-                
+
                 if (redConditionCheck(row, column)){
                     graphics.setColor(Color.RED);
                 } else {

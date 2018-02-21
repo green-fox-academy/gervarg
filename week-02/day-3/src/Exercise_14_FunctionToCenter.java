@@ -10,6 +10,35 @@ public class Exercise_14_FunctionToCenter {
         // The x and y coordinates of the line's starting point
         // and draws a line from that point to the center of the canvas.
         // Fill the canvas with lines from the edges, every 20 px, to the center.
+        int x = 0;
+        int y = 0;
+
+        drawLines(graphics, x, y);
+
+
+
+    }
+    public static void drawLines(Graphics graphics, int x, int y) {
+        graphics.setColor(Color.RED);
+        while (x <= 300){
+            x = x +20;
+            graphics.drawLine(x,y, WIDTH/2, HEIGHT/2);
+        }
+        y= 343;
+        x = 0;
+        while ( x <= 300){
+            x += 20;
+            graphics.drawLine(x,y, WIDTH/2, HEIGHT/2);
+        }
+        while( y >= 0){
+            y -= 20;
+            graphics.drawLine(x,y, WIDTH/2, HEIGHT/2);
+        }
+        x = 0;
+        while ( y <= 340){
+            y += 20;
+            graphics.drawLine(x,y, WIDTH/2, HEIGHT/2);
+        }
 
 
 
