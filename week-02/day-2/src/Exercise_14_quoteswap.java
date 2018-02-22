@@ -1,8 +1,8 @@
 import java.util.*;
 
-/*public class Exercise_14_quoteswap {
+public class Exercise_14_quoteswap {
     public static void main(String... args) {
-        ArrayList<String> list = new ArrayList<String>(Arrays.asList("What", "I", "do", "create,", "I", "cannot", "not", "understand."));
+        ArrayList<String> list = new ArrayList<String>(Arrays.asList("What", "I", "do", "create,", "I", "cannot", "not",     "understand."));
 
         // Accidentally I messed up this quote from Richard Feynman.
         // Two words are out of place
@@ -14,6 +14,19 @@ import java.util.*;
         // Expected output: "What I cannot create I do not understand."
     }
     public static String quoteSwap(ArrayList<String> quote){
+        String tester = "";
+        //ArrayList<String> newQuote = quote;
+        for (int i = 0; i < quote.size() ; i++) {
+            tester = quote.get(i);
+            if (tester.contains("do")){
+                quote.set(quote.indexOf("cannot"), tester);
+            }/* else if (tester.contains("cannot")) {
+                newQuote.set(quote.indexOf("do"), tester);
+            }
+            //quote.set(i, quote.get(i)+" ");*/
+        }
+        return quote.toString();
+        }
 
-    }
-}*/
+}
+
