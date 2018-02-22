@@ -26,7 +26,7 @@ public class HardOnes_ArmstrongNumber {
         }
         return numbersArray;
     }
-    
+
     private static int checkDigits(Integer testNumber) {
         String checker = Integer.toString(testNumber);
         int digits = checker.length();
