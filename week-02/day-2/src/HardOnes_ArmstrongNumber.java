@@ -9,28 +9,24 @@ public class HardOnes_ArmstrongNumber {
     }
 
     public static boolean armstrongNumber(int testNumber){
-        boolean isItTrue = false;
         int sumOfPower = 0;
         int digits = checkDigits(testNumber);
         int[] singleDigits = getIntArrayOfNumber(testNumber);
         for (int i = 0; i < singleDigits.length ; i++) {
             sumOfPower += Math.pow(singleDigits[i], digits);
         }
-        if ( sumOfPower == testNumber){
-            isItTrue = true;
-        }
-        return isItTrue;
+        return sumOfPower == testNumber;
     }
 
     private static int[] getIntArrayOfNumber(int testNumber) {
         String convert = Integer.toString(testNumber);
-        String[] integerString = convert.split("");
-        int[] numbersArray = new int[integerString.length];
-        for (int i = 0; i < integerString.length; i++) {
-            numbersArray[i] = Integer.parseInt(integerString[i]);
+        int[] numbersArray = new int[convert.length()];
+        for (int i = 0; i < convert.length() ; i++) {
+                 numbersArray[i] = Character.getNumericValue(convert.charAt(i));
         }
         return numbersArray;
     }
+    
     private static int checkDigits(Integer testNumber) {
         String checker = Integer.toString(testNumber);
         int digits = checker.length();

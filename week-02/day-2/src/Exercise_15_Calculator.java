@@ -45,6 +45,6 @@ public class Exercise_15_Calculator {
         else if (toCalc[0].equals("%")){
             result = number1 + number2;
         }
-        System.out.println("Theresult is: " + result);
+        System.out.println("The result is: " + result);
     }
 }
