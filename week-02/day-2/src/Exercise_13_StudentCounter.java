@@ -46,14 +46,16 @@ public class Exercise_13_StudentCounter {
         //  - Who has got more candies than 4 candies
         //  - Sum the age of people who have lass than 5 candies
         for (int i = 0; i < map.size(); i++) {
-            if(map.get(i).getOrDefault("candies", i).hashCode() > 4){
+            if((int)map.get(i).get("candies") > 4){
                 System.out.println(map.get(i));
             }
         }
-        int sum = 0;
-        for (int j = 1; j < map.size() ; j++) {
-            if(map.get(j).getOrDefault("candies", j).hashCode() < 5){
-                sum += map.get(j).getOrDefault("age", j).hashCode();
+        Integer l = 12;
+        l.doubleValue();
+        double sum = 0;
+        for (int j = 0; j < map.size() ; j++) {
+            if((int)map.get(j).get("candies") < 5){
+                sum += Double.valueOf(map.get(j).get("age").toString());
             }
         }
         System.out.println(sum);
