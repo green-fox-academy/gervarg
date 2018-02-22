@@ -15,13 +15,13 @@ public class Exercise_14_quoteswap {
     }
     public static String quoteSwap(ArrayList<String> quote){
         String tester = "";
-        //ArrayList<String> newQuote = quote;
+        ArrayList<String> newQuote = quote;
         for (int i = 0; i < quote.size() ; i++) {
             tester = quote.get(i);
             if (tester.contains("do")){
-                quote.set(quote.indexOf("cannot"), tester);
-            }/* else if (tester.contains("cannot")) {
-                newQuote.set(quote.indexOf("do"), tester);
+                quote.set(newQuote.indexOf("cannot"), tester);
+            } else if (tester.contains("cannot")) {
+                quote.set(newQuote.indexOf("do"), tester);
             }
             //quote.set(i, quote.get(i)+" ");*/
         }
