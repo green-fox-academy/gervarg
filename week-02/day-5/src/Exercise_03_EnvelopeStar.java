@@ -4,34 +4,24 @@ import java.awt.*;
 
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
-public class Exercise_01_LinePlay {
+public class Exercise_03_EnvelopeStar {
   public static void mainDraw(Graphics graphics) {
     // Fill the canvas with a checkerboard pattern.
-    int x = 0;
-    int y = 0;
 
-    drawLines(graphics, x, y);
+    drawLines(graphics);
 
 
 
 
   }
-  public static void drawLines(Graphics graphics, int x, int y) {
-    graphics.setColor(Color.MAGENTA);
-    for (int i = 0; i < WIDTH/20; i++) {
-      graphics.drawLine(x,0, WIDTH, y);
-      x = x +20;
-      y = y + 20;
-    }
-    x = 0;
-    y = 0;
+  public static void drawLines(Graphics graphics) {
     graphics.setColor(Color.GREEN);
-    for (int j = 0; j < WIDTH/20 ; j++) {
-      graphics.drawLine(WIDTH-x,HEIGHT, 0, HEIGHT-y);
-      x = x + 20;
-      y += 20;
+    for (int i = 0; i < WIDTH/2; i+= 10) {
+      graphics.drawLine(WIDTH/2,i, WIDTH/2+i, WIDTH/2);
+      graphics.drawLine(WIDTH/2,i, WIDTH/2-i, WIDTH/2);
+      graphics.drawLine(WIDTH/2,WIDTH-i,WIDTH/2-i,WIDTH/2);
+      graphics.drawLine(WIDTH/2,WIDTH-i, WIDTH/2+i,WIDTH/2);
     }
-
   }
 
 
