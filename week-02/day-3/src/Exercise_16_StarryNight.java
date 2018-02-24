@@ -20,14 +20,7 @@ public class Exercise_16_StarryNight {
             int color = (int)(Math.random()* 255);
             graphics.setColor(new Color(color, color, color));
             graphics.fillRect(x, y, size, size);
-
         }
-
-
-
-
-
-
     }
 
     // Don't touch the code below

@@ -10,15 +10,15 @@ public class Exercise_10_RainboxBoxFunction {
         // The square size, and the fill color,
         // and draws a square of that size and color to the center of the canvas.
         // Create a loop that fills the canvas with rainbow colored squares.
-        int size = 200;
-        int color = 30;
-        drawSquare(graphics,size, color);
+        int size = WIDTH;
+        drawSquare(graphics,size);
 
 
 
     }
-    public static void drawSquare(Graphics graphics, int size, int color) {
+    public static void drawSquare(Graphics graphics, int size) {
         graphics.setColor(Color.RED);
+        int color = 30;
         for (int i = 7; i > 0; i--) {
             size -= 30;
             color += 20;
