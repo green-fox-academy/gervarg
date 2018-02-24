@@ -3,10 +3,16 @@ import java.util.Scanner;
 
 public class Exercise_22_PalindromeBuilder {
     public static void main(String[] args) {
+        String input = userInput();
+        palindromeBuilder(input);
+
+        }
+
+    private static String userInput() {
         Scanner userInput = new Scanner(System.in);
         System.out.println("Write a word to build a palindrome from it: ");
         String input = userInput.nextLine();
-        palindromeBuilder(input);
+        return input;
 
     }
 
