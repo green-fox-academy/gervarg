@@ -23,7 +23,9 @@ public class Exercise_12_PurpleSteps3D {
             y += size;
             graphics.setColor(new Color(128, 0, 128));
             graphics.fillRect(x-size, y-size, size, size);
-            size += 20;
+            graphics.setColor(Color.BLACK);
+            graphics.drawRect(x-size,y-size,size,size);
+          size += 20;
         }
     }
     // Don't touch the code below
