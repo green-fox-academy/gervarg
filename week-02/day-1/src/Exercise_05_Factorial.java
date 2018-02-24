@@ -11,10 +11,18 @@ public class Exercise_05_Factorial {
         System.out.println(factorio(numberToFactorial));
     }
     public static int factorio(int lengthOfFactorial){
-        int factorial=1;
+      int factorial;
+      if(lengthOfFactorial == 1 || lengthOfFactorial == 0){
+        return 1;
+      }
+        else {
+        factorial = factorio(lengthOfFactorial-1)*lengthOfFactorial;
+      }
+      return factorial;
+      /*
         for (int i = lengthOfFactorial; i > 0; i--){
              factorial *= i;
         }
-        return factorial;
+        return factorial;*/
     }
 }
