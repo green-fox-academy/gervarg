@@ -6,14 +6,15 @@ import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
 public class Exercise_08_PositionSquare {
 
+    static int SIZE = 50;
     public static void mainDraw(Graphics graphics){
         // create a square drawing function that takes 2 parameters:
         // the x and y coordinates of the square's top left corner
         // and draws a 50x50 square from that point.
         // draw 3 squares with that function.
         // avoid code duplication.
-        int x = 50;
-        int y = 30;
+        int x = (int) (Math.random() * WIDTH);
+        int y = (int) (Math.random() * HEIGHT);
         drawSquare(graphics,x,y);
 
 
@@ -25,7 +26,7 @@ public class Exercise_08_PositionSquare {
         for (int i = 0; i < 3; i++) {
             x = x +10;
             y = y + 30;
-            graphics.drawRect(x,y,50,50);
+            graphics.drawRect(x,y,SIZE,SIZE);
         }
     }
 
