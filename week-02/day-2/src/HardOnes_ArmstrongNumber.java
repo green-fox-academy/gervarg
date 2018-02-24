@@ -29,7 +29,9 @@ public class HardOnes_ArmstrongNumber {
 
     private static int checkDigits(Integer testNumber) {
         String checker = Integer.toString(testNumber);
-        int digits = checker.length();
+
+        return checker.length();
+    }
 
         //the other way
         /*int digits = 0;
@@ -37,7 +39,8 @@ public class HardOnes_ArmstrongNumber {
             int i = 10;
             testNumber = testNumber /10;
             digits++;
-        } while (testNumber > 0);*/
+        } while (testNumber > 0);
         return digits;
-    }
+        */
+
 }

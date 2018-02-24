@@ -50,8 +50,6 @@ public class Exercise_13_StudentCounter {
                 System.out.println(map.get(i));
             }
         }
-        Integer l = 12;
-        l.doubleValue();
         double sum = 0;
         for (int j = 0; j < map.size() ; j++) {
             if((int)map.get(j).get("candies") < 5){

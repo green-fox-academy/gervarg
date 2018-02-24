@@ -15,13 +15,19 @@ public class Exercise_12_HeWillNever {
         map.put(1, "Never gonna ");
         map.put(11, "\n");
         map.put(3, "say goodbye ");
-        for (int i = 0; i < notSoCrypticMessage.length ; i++) {
-            out += map.get(notSoCrypticMessage[i]);
-        }
-        // Things are a little bit messed up
-        // Your job is to decode the notSoCrypticMessage by using the hashmap as a look up table
-        // Assemble the fragments into the out variable
 
-        System.out.println(out);
+      // Things are a little bit messed up
+      // Your job is to decode the notSoCrypticMessage by using the hashmap as a look up table
+      // Assemble the fragments into the out variable
+
+      out = decode(map, notSoCrypticMessage);
+      System.out.println(out);
     }
+  public static String decode( Map<Integer, String> mapCode, int[] message){
+      String output = "";
+    for (int i = 0; i < message.length ; i++) {
+      output += mapCode.get(message[i]);
+    }
+    return output;
+  }
 }
