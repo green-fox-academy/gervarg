@@ -20,10 +20,10 @@ public class HardOnes_Josephus {
     ArrayList<Integer> listOfNumbers = (prisoners(numberToSolve));
     for (int i = 1; i < numberToSolve; i++) {
       for (int j = 1; j < listOfNumbers.size(); j++) {
-        if (numberToSolve % 2 != 0 && listOfNumbers.lastIndexOf(j) % 2 != 0) { //how to delete 1 after first circle??
+        if (numberToSolve % 2 != 0 && listOfNumbers.get(listOfNumbers.size()-1) % 2 != 0) { //how to delete 1 after first circle??
           listOfNumbers.remove(0);
-        } /*else if (listOfNubers.size() == 2 && j == 1) {
-          listOfNubers.remove(0);
+        } /*else if (listOfNumbers.size() == 2 && j == 1) {
+          listOfNumbers.remove(0);
         }*/
         else {
           listOfNumbers.remove(j);
