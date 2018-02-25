@@ -8,23 +8,29 @@ public class HardOnes_Josephus {
     System.out.println(josephusProblem(numberToSolve));
   }
 
-  private static String josephusProblem(int numberToSolve) {
-    ArrayList<Integer> listOfNubers = new ArrayList<>();
+  public static ArrayList<Integer> prisoners(int numberToSolve){
+    ArrayList<Integer> prisonersList = new ArrayList<>();
     for (int i = 1; i <= numberToSolve; i++) {
-      listOfNubers.add(i-1, i);
+      prisonersList.add(i-1, i);
     }
+    return prisonersList;
+  }
+
+  private static String josephusProblem(int numberToSolve) {
+    ArrayList<Integer> listOfNumbers = (prisoners(numberToSolve));
     for (int i = 1; i < numberToSolve; i++) {
-      for (int j = 1; j < listOfNubers.size(); j++) {
-        if (numberToSolve % 2 != 0 && i == numberToSolve - 1) { //how to delete 1 after first circle??
+      for (int j = 1; j < listOfNumbers.size(); j++) {
+        if (numberToSolve % 2 != 0 && listOfNumbers.lastIndexOf(j) % 2 != 0) { //how to delete 1 after first circle??
+          listOfNumbers.remove(0);
+        } /*else if (listOfNubers.size() == 2 && j == 1) {
           listOfNubers.remove(0);
-        } else if (listOfNubers.size() == 2 && j == 1)
-          listOfNubers.remove(0);
+        }*/
         else {
-          listOfNubers.remove(j);
+          listOfNumbers.remove(j);
         }
       }
 
     }
-    return listOfNubers.toString();
+    return listOfNumbers.toString();
   }
 }
