@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Exercise_21_Anagram {
+public class Exercise_21_Palindrome {
     public static void main(String[] args) {
         Scanner userInput = new Scanner(System.in);
         String input1 = userInput.nextLine();
