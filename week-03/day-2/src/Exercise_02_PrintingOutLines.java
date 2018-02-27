@@ -13,7 +13,6 @@ public class Exercise_02_PrintingOutLines {
     // then it should print an error message like: "Unable to read file: my-file.txt"
     String pathstring = "my-file.txt";
     Path path1 =  Paths.get("C:\\Users\\User\\Documents\\greenfox\\gervarg\\week-03\\day-2\\src\\my-file.txt");
-    //File file1 = new File(pathstring);
     try {
       List<String> lines = Files.readAllLines(path1);
       for (int i = 0; i < lines.size(); i++) {
