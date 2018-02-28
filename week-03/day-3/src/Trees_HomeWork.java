@@ -33,5 +33,6 @@ public class Trees_HomeWork {
     treeType5.put("age", 30);
     treeType5.put("sex", "male");
 
+
   }
 }
