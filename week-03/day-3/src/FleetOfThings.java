@@ -15,7 +15,7 @@ public class FleetOfThings {
     Thing eat = new Thing("Eat lunch");
     eat.complete();
     fleet.add(eat);
-    
+
     System.out.println(fleet);
   }
 }
