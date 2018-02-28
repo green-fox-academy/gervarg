@@ -24,6 +24,13 @@ public class Main {
     sharp1.use();
     System.out.println(sharp1);
 
+    Student leslie = new Student("Leslie");
+    Teacher marin = new Teacher("Marin");
+    leslie.learn();
+    leslie.question(marin);
+    marin.answer();
+    marin.teach(leslie);
+
 
 
 
