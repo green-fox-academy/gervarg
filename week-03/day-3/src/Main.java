@@ -31,8 +31,10 @@ public class Main {
     marin.answer();
     marin.teach(leslie);
 
-
-
+    Station shell = new Station(1000);
+    Car ferrari = new Car(10, 120);
+    shell.refill(ferrari);
+    System.out.println(shell.toString()+"\n"+ferrari.toString());
 
   }
 }
