@@ -43,11 +43,16 @@ public class Dice {
     myDice.getCurrent();
     myDice.reroll(4);
     myDice.getCurrent();
+    getDicesToSix(myDice);
+
+  }
+  public static void getDicesToSix(Dice myDice){
     for (int i = 0; i < 6; i++) {
       while (myDice.getCurrent(i) != 6){
         myDice.reroll();
       }
       System.out.println(myDice.getCurrent(i));
     }
+
   }
 }
