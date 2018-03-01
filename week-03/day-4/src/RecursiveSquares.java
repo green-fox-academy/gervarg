@@ -5,42 +5,39 @@ import java.awt.*;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
 public class RecursiveSquares {
-  static int LIMIT = 5;
+  static int LIMIT = 10;
   public static void mainDraw(Graphics graphics){
 
     int size = WIDTH/3;
     int x = size;
     int y = size;
-    int n =0;
+    int n = 0;
     recurseDrawSqaure(x,y,graphics, n,size);
     graphics.drawRect(0,0,WIDTH,HEIGHT);
 
   }
 
- /* private static void (Graphics graphics, int squareSize, int x, int y) {
-    int n =0;
-    graphics.drawRect(x,0,squareSize,squareSize);
-    recurseDrawSqaure(x,0,graphics,n, squareSize);
-    graphics.drawRect(0,y,squareSize,squareSize);
-    graphics.drawRect(2*x,y,squareSize,squareSize);
-    graphics.drawRect(x,2*y,squareSize,squareSize);
-  }*/
   private static void recurseDrawSqaure(int w, int h, Graphics g, int n, int size){
     if ( n == LIMIT ) {
       return;
     } else {
       n++;
+
+      g.drawRect(w,h-size,size,size);
+      recurseDrawSqaure(w+size/3,h-size+size/3,g,n,size/3);
       g.drawRect(w-size,h,size,size);
-      recurseDrawSqaure(w+size/3,h-size/3,g,n,size/3);
+      recurseDrawSqaure(w-size+size/3,h+size/3,g,n,size/3);
       g.drawRect(w+size,h,size,size);
-      recurseDrawSqaure(w+size/3,h+size/3,g,n,size/3);
+      recurseDrawSqaure(w+size+size/3,h+size/3,g,n,size/3);
+      g.drawRect(w,h+size,size,size);
+      recurseDrawSqaure(w+size/3,h+size+size/3,g,n,size/3);
     }
 
   }
 
   // Don't touch the code below
-  static int WIDTH = 600;
-  static int HEIGHT = 600;
+  static int WIDTH = 486;
+  static int HEIGHT = 486;
 
   public static void main(String[] args) {
     JFrame jFrame = new JFrame("Drawing");
