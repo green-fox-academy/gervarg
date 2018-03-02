@@ -1,14 +1,16 @@
 import javax.swing.*;
 
 import java.awt.*;
+import java.util.Random;
 
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
 public class Sierpinsky {
   static int LIMIT = 7;
+  static int iterator = 0;
   public static void mainDraw(Graphics graphics){
 
-    int size = WIDTH/4;
+    int size = WIDTH/3;
     int x = WIDTH/2-size/2;
     int y = HEIGHT/2-size/2;
     int n = 0;
@@ -16,9 +18,17 @@ public class Sierpinsky {
     graphics.fillRect(x,y,size,size);
 
   }
+  private static Color getRandomColor() {
+    Random random = new Random();
+    int r = random.nextInt(256);
+    int g = random.nextInt(256);
+    int b = random.nextInt(256);
+    return new Color(r, g, b);
+
+  }
 
   private static void sierpinsky(int x, int y, Graphics g, int n, int size){
-
+    g.setColor(getRandomColor());
     g.fillRect(x,y,size,size);
     if ( n == LIMIT ) {
       return;
@@ -50,17 +60,25 @@ public class Sierpinsky {
   }
 
   // Don't touch the code below
-  static int WIDTH = 324;
-  static int HEIGHT = 324;
+  static int WIDTH = 729;
+  static int HEIGHT = 729;
 
   public static void main(String[] args) {
     JFrame jFrame = new JFrame("Drawing");
+    ImagePanel imagePanel = new ImagePanel();
+
     jFrame.setSize(new Dimension(WIDTH, HEIGHT));
     jFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-    jFrame.add(new ImagePanel());
+    jFrame.add(imagePanel);
     jFrame.setLocationRelativeTo(null);
     jFrame.setVisible(true);
+    while(true) {
+      imagePanel.repaint();
+      iterator ++;
+
+    }
   }
+
 
   static class ImagePanel extends JPanel {
     @Override
