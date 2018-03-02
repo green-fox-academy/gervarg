@@ -4,7 +4,7 @@ import java.awt.*;
 
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
-public class Sierpinsky {
+public class SierpinskyTest {
   static int LIMIT = 7;
   public static void mainDraw(Graphics graphics){
 
@@ -50,8 +50,8 @@ public class Sierpinsky {
   }
 
   // Don't touch the code below
-  static int WIDTH = 324;
-  static int HEIGHT = 324;
+  static int WIDTH = 666;
+  static int HEIGHT = 666;
 
   public static void main(String[] args) {
     JFrame jFrame = new JFrame("Drawing");
