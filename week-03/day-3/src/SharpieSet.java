@@ -2,12 +2,12 @@ import java.util.List;
 
 public class SharpieSet {
   Sharpie sharpies = new Sharpie("red", 100);
-  List<Sharpie> listOfSharpiest;
+  List<Sharpie> listOfSharpies;
 
 
   public int countUsable(List<Sharpie> listOfSharpies){
     int counter = 0;
-    for (int i = 0; i < listOfSharpies.size(); i++) {
+    for (Sharpie sharpies : listOfSharpies) {
       if (sharpies.getInkAmount() > 0){
         counter++;
       }
@@ -23,6 +23,6 @@ public class SharpieSet {
     return listOfSharpies;
   }
   public String toString() {
-    return listOfSharpiest.toString();
+    return listOfSharpies.toString();
   }
 }
