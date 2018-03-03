@@ -29,7 +29,7 @@ public class Sierpinsky {
   }
 
   private static void sierpinsky(int x, int y, Graphics g, int n, int size, int iterator){
-    g.setColor(getRandomColor());
+    //g.setColor(getRandomColor());
     g.fillRect(x,y,size,size);
     if ( n == LIMIT ) {
       return;
