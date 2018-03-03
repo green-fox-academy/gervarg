@@ -7,12 +7,14 @@ public class Pirate {
   private int drinkingCounter;
   private boolean isItDead = false;
   private boolean passedOut;
+  private boolean isCaptain;
 
 
   public Pirate(String pirateName){
     this.drinkingCounter = 0;
     this.pirateName = pirateName;
     passedOut = false;
+    isCaptain = true;
   }
 
   public void drinkSomeRum(){
@@ -56,5 +58,40 @@ public class Pirate {
       passedOut = true;
     }
   }
+  public void captain(){
+    isCaptain = true;
+  }
 
+  public String getPirateName() {
+    return pirateName;
+  }
+
+  public void setPirateName(String pirateName) {
+    this.pirateName = pirateName;
+  }
+
+  public int getDrinkingCounter() {
+    return drinkingCounter;
+  }
+
+  public void setDrinkingCounter(int drinkingCounter) {
+    this.drinkingCounter = drinkingCounter;
+  }
+
+  public boolean isItDead() {
+    return isItDead;
+  }
+
+  public void setItDead(boolean itDead) {
+    isItDead = itDead;
+  }
+
+  public boolean isPassedOut() {
+    return passedOut;
+  }
+
+  public void setPassedOut(boolean passedOut) {
+    this.passedOut = passedOut;
+  }
 }
+
