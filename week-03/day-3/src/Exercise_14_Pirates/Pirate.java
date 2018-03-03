@@ -37,16 +37,19 @@ public class Pirate {
   }
   public void die(){
     isItDead = true;
+    System.out.println(pirateName + " died!");
   }
   public void brawl(Pirate pirate){
     Random random = new Random();
     int randomNumber = random.nextInt(3) + 1;
 
     if (randomNumber == 1){
-
+      pirate.die();
+      System.out.println(pirateName + " wins the fight againts " + pirate.pirateName + "!");
     }
     else if (randomNumber == 2){
       die();
+      System.out.println(pirateName + " loses the fight to " + pirate.pirateName + " and dies!");
     }
     else{
       System.out.println("Both pirates passed out.");
