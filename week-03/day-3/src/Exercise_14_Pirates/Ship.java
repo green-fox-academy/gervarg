@@ -21,6 +21,7 @@ public class Ship {
       shipCrew.add(new Pirate("namefiller"));
       if (i < numberOfPiratesOnShip -1){
         shipCrew.get(i).captain();
+        System.out.println(shipCrew.get(i) + " is the captain of the ship!");
       }
     }
   }
