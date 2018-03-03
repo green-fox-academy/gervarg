@@ -1,3 +1,5 @@
+package Exercise_10_PetrolStation;
+
 public class Station {
   private float gasAmountStation = 1000;
 

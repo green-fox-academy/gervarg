@@ -1,3 +1,5 @@
+package Exercise_10_PetrolStation;
+
 public class Car {
   private float gasAmount;
   private float capacity;

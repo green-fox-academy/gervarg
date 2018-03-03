@@ -1,3 +1,5 @@
+package Exercise_01_PostIt;
+
 public class PostIt {
   private String backgroundColor;
   private String text;

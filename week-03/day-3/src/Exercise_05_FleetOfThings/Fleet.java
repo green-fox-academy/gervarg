@@ -1,3 +1,5 @@
+package Exercise_05_FleetOfThings;
+
 import java.util.ArrayList;
 
 /**

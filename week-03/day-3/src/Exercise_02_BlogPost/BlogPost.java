@@ -1,3 +1,5 @@
+package Exercise_02_BlogPost;
+
 public class BlogPost {
   private String authorname;
   private String title;

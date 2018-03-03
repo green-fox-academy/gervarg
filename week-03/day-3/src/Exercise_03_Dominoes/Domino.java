@@ -1,3 +1,5 @@
+package Exercise_03_Dominoes;
+
 import java.util.Arrays;
 
 public class Domino {

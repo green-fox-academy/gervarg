@@ -1,3 +1,5 @@
+package Exercise_06_Animal;
+
 public class Animal {
   private int hunger = 50;
   private int thirst = 50;
@@ -9,8 +11,8 @@ public class Animal {
     thirst--;
   }
   public void play(){
-    thirst--;
-    hunger--;
+    thirst++;
+    hunger++;
   }
   public String toString(){
     return "hunger: " + hunger + ",thirst: " + thirst;

@@ -1,3 +1,7 @@
+package Exercise_05_FleetOfThings;
+
+import Exercise_05_FleetOfThings.Fleet;
+
 public class FleetOfThings {
 
   public static void main(String[] args) {

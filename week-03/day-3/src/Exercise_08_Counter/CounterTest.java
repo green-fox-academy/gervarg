@@ -1,3 +1,5 @@
+package Exercise_08_Counter;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

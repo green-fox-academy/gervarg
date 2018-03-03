@@ -1,3 +1,5 @@
+package Exercise_04_Dice;
+
 import java.util.Arrays;
 
 public class Dice {

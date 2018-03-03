@@ -1,3 +1,5 @@
+package Exercise_11_SharpieSet;
+
 public class Sharpie {
   private String color;
   private float width;
