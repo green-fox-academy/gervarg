@@ -8,23 +8,26 @@ public class Ship {
 
   Random randomNumber = new Random();
   private boolean shipWon;
+  private String shipName;
   private List<Pirate> shipCrew = new ArrayList<>();
 
-  public Ship(){
+  public Ship(String shipName){
+    this.shipName = shipName;
     this.shipWon = true;
 
 
   }
 
   public void fillShip(){
+    Pirate shipCaptain = null;
     int numberOfPiratesOnShip = randomNumber.nextInt(40)+5;
     for (int i = 0; i < numberOfPiratesOnShip; i++) {
       shipCrew.add(new Pirate("namefiller"));
       if (i < numberOfPiratesOnShip -1){
-        shipCrew.get(i).captain();
-        System.out.println(shipCrew.get(i) + " is the captain of the ship!");
+        shipCaptain = shipCrew.get(i).captain();
       }
     }
+    System.out.println(shipCaptain.getPirateName() + " is the captain of the ship!");
   }
 
   public boolean battle(Ship enemyShip){
@@ -48,11 +51,14 @@ public class Ship {
     if (shipWon){
       System.out.println("The pirates are having a party celebrating their victory!");
       for (Pirate pirates : shipCrew) {
-        pirates.getDrinkingCounter();
+        pirates.drinkSomeRum();
       }
     } else {
       System.out.println("The losing ship doesn't get to party!");
     }
   }
 
+  public List<Pirate> getShipCrew() {
+    return shipCrew;
+  }
 }
