@@ -40,16 +40,16 @@ public class Pirate {
     System.out.println(pirateName + " died!");
   }
 
-  public void brawl(Pirate pirate) {
+  public void brawl(Pirate enemyPirate) {
     Random random = new Random();
     int randomNumber = random.nextInt(3) + 1;
 
     if (randomNumber == 1) {
-      pirate.die();
-      System.out.println(pirateName + " wins the fight against " + pirate.pirateName + "!");
+      enemyPirate.die();
+      System.out.println(pirateName + " wins the fight against " + enemyPirate.pirateName + "!");
     } else if (randomNumber == 2) {
       die();
-      System.out.println(pirateName + " loses the fight to " + pirate.pirateName + " and dies!");
+      System.out.println(pirateName + " loses the fight to " + enemyPirate.pirateName + " and dies!");
     } else {
       System.out.println("Both pirates passed out.");
       passedOut = true;
