@@ -7,10 +7,11 @@ import java.util.Random;
 public class Ship {
 
   Random randomNumber = new Random();
-
-  List<Pirate> shipCrew = new ArrayList<>();
+  private boolean shipWon;
+  private List<Pirate> shipCrew = new ArrayList<>();
 
   public Ship(){
+    this.shipWon = true;
 
 
   }
@@ -23,6 +24,34 @@ public class Ship {
         shipCrew.get(i).captain();
         System.out.println(shipCrew.get(i) + " is the captain of the ship!");
       }
+    }
+  }
+
+  public boolean battle(Ship enemyShip){
+    int shipScore = shipCrew.size() - shipCrew.get(shipCrew.size()-1).getDrinkingCounter();
+    int shipScoreEnemy = enemyShip.shipCrew.size() - enemyShip.shipCrew.get(enemyShip.shipCrew.size()-1).getDrinkingCounter();
+    if (shipScore > shipScoreEnemy ){
+      for (int i = 0; i < enemyShip.shipCrew.size() - randomNumber.nextInt(40); i++) {
+        enemyShip.shipCrew.remove(i);
+      }
+      return shipWon;
+    }
+    else {
+      for (int i = 0; i < shipCrew.size() - randomNumber.nextInt(40); i++) {
+        shipCrew.remove(i);
+      }
+      return !shipWon;
+    }
+  }
+
+  public void party(){
+    if (shipWon){
+      System.out.println("The pirates are having a party celebrating their victory!");
+      for (Pirate pirates : shipCrew) {
+        pirates.getDrinkingCounter();
+      }
+    } else {
+      System.out.println("The losing ship doesn't get to party!");
     }
   }
 
