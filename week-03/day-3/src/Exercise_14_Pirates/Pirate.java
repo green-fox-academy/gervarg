@@ -46,7 +46,7 @@ public class Pirate {
 
     if (randomNumber == 1) {
       pirate.die();
-      System.out.println(pirateName + " wins the fight againts " + pirate.pirateName + "!");
+      System.out.println(pirateName + " wins the fight against " + pirate.pirateName + "!");
     } else if (randomNumber == 2) {
       die();
       System.out.println(pirateName + " loses the fight to " + pirate.pirateName + " and dies!");
@@ -68,5 +68,12 @@ public class Pirate {
     return drinkingCounter;
   }
 
+  public boolean isItDead() {
+    return isItDead;
+  }
+
+  public boolean isPassedOut() {
+    return passedOut;
+  }
 }
 

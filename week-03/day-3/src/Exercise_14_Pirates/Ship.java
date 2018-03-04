@@ -10,12 +10,11 @@ public class Ship {
   private boolean shipWon;
   private String shipName;
   private List<Pirate> shipCrew = new ArrayList<>();
+  private int shipScore;
 
   public Ship(String shipName){
     this.shipName = shipName;
     this.shipWon = true;
-
-
   }
 
   public void fillShip(){
@@ -23,17 +22,22 @@ public class Ship {
     int numberOfPiratesOnShip = randomNumber.nextInt(40)+5;
     for (int i = 0; i < numberOfPiratesOnShip; i++) {
       shipCrew.add(new Pirate("namefiller"));
-      if (i < numberOfPiratesOnShip -1){
-        shipCaptain = shipCrew.get(i).captain();
-      }
+      shipCaptain = shipCrew.get(0).captain();
+
     }
     System.out.println(shipCaptain.getPirateName() + " is the captain of the ship!");
+    System.out.println("Captain Drunkness: " + shipCaptain.getDrinkingCounter() +  "\nIs he alive? "
+    + shipCaptain.isItDead() + "\nIs he passed out? " + shipCaptain.isPassedOut());
+  }
+
+  public int calculateShipScore(){
+    int shipScore = shipCrew.size() - shipCrew.get(0).getDrinkingCounter();
+    return shipScore;
   }
 
   public boolean battle(Ship enemyShip){
-    int shipScore = shipCrew.size() - shipCrew.get(shipCrew.size()-1).getDrinkingCounter();
-    int shipScoreEnemy = enemyShip.shipCrew.size() - enemyShip.shipCrew.get(enemyShip.shipCrew.size()-1).getDrinkingCounter();
-    if (shipScore > shipScoreEnemy ){
+
+    if (calculateShipScore() > enemyShip.calculateShipScore()){
       for (int i = 0; i < enemyShip.shipCrew.size() - randomNumber.nextInt(40); i++) {
         enemyShip.shipCrew.remove(i);
       }
