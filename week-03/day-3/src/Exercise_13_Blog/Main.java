@@ -15,6 +15,7 @@ public class Main {
     howStuffWorks.addSpecificPost(latin);
     howStuffWorks.addSpecificPost(waitButWhy);
     howStuffWorks.addSpecificPost(engineerToIBM);
+
     System.out.println(howStuffWorks.getBlogPosts().get(1));
     System.out.println(howStuffWorks.getBlogPosts().size());
     howStuffWorks.deletePost(1);
