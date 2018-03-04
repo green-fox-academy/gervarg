@@ -27,7 +27,7 @@ public class Ship {
     }
     System.out.println(shipCaptain.getPirateName() + " is the captain of the ship!");
     System.out.println("Captain Drunkness: " + shipCaptain.getDrinkingCounter() +  "\nIs he alive? "
-    + shipCaptain.isItDead() + "\nIs he passed out? " + shipCaptain.isPassedOut());
+    + shipCaptain.isHeAlive() + "\nIs he passed out? " + shipCaptain.isPassedOut());
   }
 
   public int calculateShipScore(){
@@ -47,7 +47,7 @@ public class Ship {
       for (int i = 0; i < shipCrew.size() - randomNumber.nextInt(40); i++) {
         shipCrew.remove(i);
       }
-      return !shipWon;
+      return shipWon = false;
     }
   }
 

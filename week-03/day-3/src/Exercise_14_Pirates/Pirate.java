@@ -5,7 +5,7 @@ import java.util.Random;
 public class Pirate {
   private String pirateName;
   private int drinkingCounter;
-  private boolean isItDead = false;
+  private boolean isHeAlive = true;
   private boolean passedOut;
 
   public Pirate(String pirateName) {
@@ -15,7 +15,7 @@ public class Pirate {
   }
 
   public void drinkSomeRum() {
-    if (isItDead) {
+    if (!isHeAlive) {
       System.out.println(pirateName + " is dead!");
     } else {
       drinkingCounter++;
@@ -23,7 +23,7 @@ public class Pirate {
   }
 
   public void howIsItGoingMate() {
-    if (isItDead) {
+    if (!isHeAlive) {
       System.out.println(pirateName + " is dead!");
     } else if (drinkingCounter < 4) {
       System.out.println("Pour me anudder!");
@@ -36,7 +36,7 @@ public class Pirate {
   }
 
   public void die() {
-    isItDead = true;
+    isHeAlive = false;
     System.out.println(pirateName + " died!");
   }
 
@@ -68,8 +68,8 @@ public class Pirate {
     return drinkingCounter;
   }
 
-  public boolean isItDead() {
-    return isItDead;
+  public boolean isHeAlive() {
+    return isHeAlive;
   }
 
   public boolean isPassedOut() {

@@ -14,7 +14,6 @@ public class Main {
     System.out.println(dutch.getShipCrew().size());
     pearl.battle(dutch);
     pearl.party();
-    dutch.party();
 
 
   }
