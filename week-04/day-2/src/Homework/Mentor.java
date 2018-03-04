@@ -1,12 +1,12 @@
 package Homework;
 
-public class Mentor {
+public class Mentor extends Person {
   private String name;
   private int age;
-  private String[] gender = {"male", "female"};
-  private String[] level = {"junior", "intermediate", "senior"};
+  private String gender;
+  private String level;
 
-  public Mentor(String name, int age, String[] gender,String[] level){
+  public Mentor(String name, int age, String gender,String level){
     this.name = name;
     this.age = age;
     this.gender = gender;
@@ -16,8 +16,8 @@ public class Mentor {
   public Mentor(){
     name = "Jane Doe";
     age = 30;
-    gender[1] = "female";
-    level[1] = "intermediate";
+    gender = "female";
+    level = "intermediate";
   }
 
   public void introduce(){

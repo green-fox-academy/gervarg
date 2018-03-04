@@ -1,23 +1,28 @@
 package Homework;
 
-public class Student {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Student extends Person {
   private String name;
   private int age;
-  private String[] gender = {"male", "female"};
+  private String gender;
   private String previousOrganization;
   private int skippedDays;
 
-  public Student(String name, int age, String[] gender, String previousOrganization){
+
+  public Student(String name, int age, String gender, String previousOrganization){
     this.name = name;
     this.age = age;
     this.gender = gender;
     this.previousOrganization = previousOrganization;
+    this.skippedDays = 0;
   }
 
   public Student(){
     name = "Jane Doe";
     age = 30;
-    gender[1] = "female";
+    gender = "female";
     previousOrganization = "The School of Life";
     skippedDays = 0;
   }

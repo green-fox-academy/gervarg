@@ -1,11 +1,15 @@
 package Homework;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Person {
   private String name;
   private int age;
-  private String[] gender = {"male", "female"};
+  private String gender;
+  //private List<Person> person = new ArrayList<>();
 
-  public Person(String name, int age, String[] gender){
+  public Person(String name, int age, String gender){
     this.name = name;
     this.age = age;
     this.gender = gender;
@@ -14,7 +18,7 @@ public class Person {
   public Person(){
     name = "Jane Doe";
     age = 30;
-    gender[1] = "female";
+    gender = "female";
   }
 
   public void introduce(){
@@ -24,5 +28,6 @@ public class Person {
   public void getGoal(){
     System.out.println("My goal is: Live for the moment!");
   }
+
 
 }
