@@ -5,13 +5,14 @@ import java.util.Random;
 public class Pirate {
   private String pirateName;
   private int drinkingCounter;
-  private boolean isHeAlive = true;
+  private boolean isHeAlive;
   private boolean passedOut;
 
   public Pirate(String pirateName) {
     this.drinkingCounter = 0;
     this.pirateName = pirateName;
     passedOut = false;
+    isHeAlive = true;
   }
 
   public void drinkSomeRum() {

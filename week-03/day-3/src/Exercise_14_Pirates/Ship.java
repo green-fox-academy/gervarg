@@ -10,7 +10,8 @@ public class Ship {
   private boolean shipWon;
   private String shipName;
   private List<Pirate> shipCrew = new ArrayList<>();
-  private int shipScore;
+  private int minimumCrew = 5;
+  private int maximumCrewRange = 40;
 
   public Ship(String shipName){
     this.shipName = shipName;
@@ -19,9 +20,9 @@ public class Ship {
 
   public void fillShip(){
     Pirate shipCaptain = null;
-    int numberOfPiratesOnShip = randomNumber.nextInt(40)+5;
+    int numberOfPiratesOnShip = randomNumber.nextInt(maximumCrewRange)+minimumCrew;
     for (int i = 0; i < numberOfPiratesOnShip; i++) {
-      shipCrew.add(new Pirate("namefiller"));
+      shipCrew.add(new Pirate(NameGenerator.generateName()));
       shipCaptain = shipCrew.get(0).captain();
 
     }
@@ -38,13 +39,13 @@ public class Ship {
   public boolean battle(Ship enemyShip){
 
     if (calculateShipScore() > enemyShip.calculateShipScore()){
-      for (int i = 0; i < enemyShip.shipCrew.size() - randomNumber.nextInt(40); i++) {
+      for (int i = 0; i < enemyShip.shipCrew.size() - randomNumber.nextInt(maximumCrewRange); i++) {
         enemyShip.shipCrew.remove(i);
       }
       return shipWon;
     }
     else {
-      for (int i = 0; i < shipCrew.size() - randomNumber.nextInt(40); i++) {
+      for (int i = 0; i < shipCrew.size() - randomNumber.nextInt(maximumCrewRange); i++) {
         shipCrew.remove(i);
       }
       return shipWon = false;
