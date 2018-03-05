@@ -26,6 +26,7 @@ public class Ship {
       shipCaptain = shipCrew.get(0).captain();
 
     }
+    randomDrunknessLevel();
     System.out.println(shipCaptain.getPirateName() + " is the captain of the ship!");
     System.out.println("Captain Drunkness: " + shipCaptain.getDrinkingCounter() + "\nIs he alive? "
             + shipCaptain.isHeAlive() + "\nIs he passed out? " + shipCaptain.isPassedOut());
@@ -61,8 +62,8 @@ public class Ship {
   }
 
   public void randomDrunknessLevel() {
-    for (int j = 0; j < shipCrew.size(); j++) {
-      for (int i = 0; i < randomNumber.nextInt(3) + 1; i++) {
+    for (int i = 0; i < shipCrew.size(); i++) {
+      for (int j = 0; j < randomNumber.nextInt(3) + 1; j++) {
         shipCrew.get(i).drinkSomeRum();
       }
     }
