@@ -24,7 +24,6 @@ public class Ship {
     for (int i = 0; i < numberOfPiratesOnShip; i++) {
       shipCrew.add(new Pirate(NameGenerator.generateName()));
       shipCaptain = shipCrew.get(0).captain();
-
     }
     randomDrunknessLevel();
     System.out.println(shipCaptain.getPirateName() + " is the captain of the ship!");

@@ -1,13 +1,9 @@
 package Homework;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Person {
   private String name;
   private int age;
   private String gender;
-  //private List<Person> person = new ArrayList<>();
 
   public Person(String name, int age, String gender){
     this.name = name;
