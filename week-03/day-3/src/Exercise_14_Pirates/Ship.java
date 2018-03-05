@@ -13,38 +13,37 @@ public class Ship {
   private int minimumCrew = 5;
   private int maximumCrewRange = 40;
 
-  public Ship(String shipName){
+  public Ship(String shipName) {
     this.shipName = shipName;
     this.shipWon = true;
   }
 
-  public void fillShip(){
+  public void fillShip() {
     Pirate shipCaptain = null;
-    int numberOfPiratesOnShip = randomNumber.nextInt(maximumCrewRange)+minimumCrew;
+    int numberOfPiratesOnShip = randomNumber.nextInt(maximumCrewRange) + minimumCrew;
     for (int i = 0; i < numberOfPiratesOnShip; i++) {
       shipCrew.add(new Pirate(NameGenerator.generateName()));
       shipCaptain = shipCrew.get(0).captain();
 
     }
     System.out.println(shipCaptain.getPirateName() + " is the captain of the ship!");
-    System.out.println("Captain Drunkness: " + shipCaptain.getDrinkingCounter() +  "\nIs he alive? "
-    + shipCaptain.isHeAlive() + "\nIs he passed out? " + shipCaptain.isPassedOut());
+    System.out.println("Captain Drunkness: " + shipCaptain.getDrinkingCounter() + "\nIs he alive? "
+            + shipCaptain.isHeAlive() + "\nIs he passed out? " + shipCaptain.isPassedOut());
   }
 
-  public int calculateShipScore(){
+  public int calculateShipScore() {
     int shipScore = shipCrew.size() - shipCrew.get(0).getDrinkingCounter();
     return shipScore;
   }
 
-  public boolean battle(Ship enemyShip){
+  public boolean battle(Ship enemyShip) {
 
-    if (calculateShipScore() > enemyShip.calculateShipScore()){
+    if (calculateShipScore() > enemyShip.calculateShipScore()) {
       for (int i = 0; i < enemyShip.shipCrew.size() - randomNumber.nextInt(maximumCrewRange); i++) {
         enemyShip.shipCrew.remove(i);
       }
       return shipWon;
-    }
-    else {
+    } else {
       for (int i = 0; i < shipCrew.size() - randomNumber.nextInt(maximumCrewRange); i++) {
         shipCrew.remove(i);
       }
@@ -52,14 +51,20 @@ public class Ship {
     }
   }
 
-  public void party(){
-    if (shipWon){
+  public void party() {
+    if (shipWon) {
       System.out.println("The pirates are having a party celebrating their victory!");
-      for (Pirate pirates : shipCrew) {
-        pirates.drinkSomeRum();
-      }
+      randomDrunknessLevel();
     } else {
       System.out.println("The losing ship doesn't get to party!");
+    }
+  }
+
+  public void randomDrunknessLevel() {
+    for (int j = 0; j < shipCrew.size(); j++) {
+      for (int i = 0; i < randomNumber.nextInt(3) + 1; i++) {
+        shipCrew.get(i).drinkSomeRum();
+      }
     }
   }
 
