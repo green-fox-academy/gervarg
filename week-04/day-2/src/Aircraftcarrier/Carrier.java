@@ -17,4 +17,14 @@ public class Carrier {
     carrierAircrafts.add(aircrafts);
   }
 
+  public void fillAllAircrafts(int ammoStore){
+
+  }
+
+  public void carrierFight(Carrier carrier){
+    //for ( : carrierAircrafts) {
+
+    
+  }
+
 }
