@@ -25,5 +25,15 @@ public class Person {
     System.out.println("My goal is: Live for the moment!");
   }
 
+  public String getName() {
+    return name;
+  }
 
+  public int getAge() {
+    return age;
+  }
+
+  public String getGender() {
+    return gender;
+  }
 }
