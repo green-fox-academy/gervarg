@@ -27,13 +27,21 @@ public class Garden {
         System.out.println("The " + currentPlant.getColorOfPlant() + " " + currentPlant.getNameOfPlant() + " doesn't need water.");
       }
     }
+    System.out.println();
   }
 
   public void watering(double wateringAmount) {
+    System.out.println("Watering with " + wateringAmount);
+    List<Plant> plantsNeedingWater = new ArrayList<>();
+    for (Plant currentPlant : gardenPlants) {
+      if (currentPlant.wateringNeeded()) {
+        plantsNeedingWater.add(currentPlant);
+      }
+    }
+    wateringAmount = wateringAmount / plantsNeedingWater.size();
     for (Plant currentPlant : gardenPlants)
       if (currentPlant.wateringNeeded()) {
-        wateringAmount = wateringAmount / gardenPlants.size();
-        currentPlant.setWaterLevel(wateringAmount + currentPlant.getWaterLevel());
+        currentPlant.setWaterLevel(wateringAmount * currentPlant.waterabsorbtion() + currentPlant.getWaterLevel());
       }
   }
 }

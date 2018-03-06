@@ -15,6 +15,14 @@ public class Plant {
     this.waterLevel = wateringAmount;
   }
 
+  public double waterabsorbtion(){
+    if (this instanceof Flower){
+      return ((Flower) this).getAbsorbtion();
+    } else {
+      return ((Tree) this).getAbsorbtion();
+    }
+  }
+
   public boolean wateringNeeded() {
     if (this instanceof Flower) {
       return waterLevel < ((Flower) this).getWateringNeed();
