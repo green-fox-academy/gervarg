@@ -13,13 +13,14 @@ public class Aircrafts {
   public int refill(int storageOfAmmo) {
     if (ammoStore < maxAmmo) {
       storageOfAmmo = storageOfAmmo - (maxAmmo - ammoStore);
+      setAmmoStore(maxAmmo);
     }
     return storageOfAmmo;
   }
 
   public int fight() {
     int damage = baseDamage * ammoStore;
-    ammoStore = 0;
+    setAmmoStore(0);
     return damage;
   }
 
@@ -40,7 +41,12 @@ public class Aircrafts {
     }
   }
 
- /* public String getStatus(){
+  public void setAmmoStore(int ammoStore) {
+    this.ammoStore = ammoStore;
+  }
 
-  }*/
+  public String getStatus(){
+    return "Type " + getType() + ", Ammo: " + ammoStore + ", Base Damage: " + baseDamage +
+            " All damage: " + fight();
+  }
 }
