@@ -5,13 +5,13 @@ import java.util.List;
 
 public class Cohort {
   private String cohortName;
-  private List<Student> cohortStudents = new ArrayList<>();
-  private List<Mentor> cohortMentors = new ArrayList<>();
+  private List<Student> cohortStudents;
+  private List<Mentor> cohortMentors;
 
   public Cohort(String cohortName) {
     this.cohortName = cohortName;
-    cohortStudents = null;
-    cohortMentors = null;
+    cohortStudents = new ArrayList<>();
+    cohortMentors = new ArrayList<>();
   }
 
 
@@ -24,7 +24,16 @@ public class Cohort {
   }
 
   public void info() {
-    System.out.println("The " + cohortName + " cohort has " + cohortStudents.size() + "students and " +
-            cohortMentors.size() + "mentors.");
+    System.out.println("The " + cohortName + " cohort has " + cohortStudents.size() + " students and " +
+            cohortMentors.size() + " mentors.");
+  }
+
+  @Override
+  public String toString() {
+    return "Cohort{" +
+            "cohortName='" + cohortName + '\'' +
+            ", cohortStudents=" + cohortStudents +
+            ", cohortMentors=" + cohortMentors +
+            '}';
   }
 }
