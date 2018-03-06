@@ -6,7 +6,7 @@ public class Flower extends Plant {
     super();
   }
 
-  public Flower(String nameOfFlower, String colorOfFlower, int wateringAmount) {
+  public Flower(String nameOfFlower, String colorOfFlower, double wateringAmount) {
     super(nameOfFlower, colorOfFlower, wateringAmount);
   }
 
@@ -17,6 +17,6 @@ public class Flower extends Plant {
   }
 
   public void wateringFlower(){
-    
+
   }
 }

@@ -1,9 +1,23 @@
 package Garden_Application;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Garden {
-  private String name;
-  private String color;
-  private int wateringAmount;
+  private List<Plant> gardenPlants = new ArrayList<>();
+  private double water;
+
+  public Garden() {
+
+  }
+
+  public void addFlowers(Flower flower) {
+    gardenPlants.add(flower);
+  }
+  public void addTrees(Tree tree){
+    gardenPlants.add(tree);
+  }
+
 
 
 }

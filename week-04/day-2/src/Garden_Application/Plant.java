@@ -3,16 +3,20 @@ package Garden_Application;
 public class Plant {
   private String nameOfPlant;
   private String colorOfPlant;
-  private int wateringAmount;
+  private double wateringAmount;
 
   public Plant() {
 
   }
 
-  public Plant(String nameOfPlant, String colorOfPlant, int wateringAmount) {
+  public Plant(String nameOfPlant, String colorOfPlant, double wateringAmount) {
     this.nameOfPlant = nameOfPlant;
     this.colorOfPlant = colorOfPlant;
-    this.wateringAmount = 0;
+    this.wateringAmount = wateringAmount;
+  }
+
+  public void plantInformation(){
+
   }
 
   public String getNameOfPlant() {
@@ -31,7 +35,7 @@ public class Plant {
     this.colorOfPlant = colorOfPlant;
   }
 
-  public int getWateringAmount() {
+  public double getWateringAmount() {
     return wateringAmount;
   }
 
