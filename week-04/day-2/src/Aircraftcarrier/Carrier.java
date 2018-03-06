@@ -13,8 +13,12 @@ public class Carrier {
     this.carrierHealth = carrierHealth;
   }
 
-  public void addAircraft(Aircrafts aircrafts){
-    carrierAircrafts.add(aircrafts);
+  public void addAircraft(String aircraftType){
+    if (aircraftType.equals("F35")){
+      carrierAircrafts.add(new F35());
+    } else if (aircraftType.equals("F16")){
+      carrierAircrafts.add(new F16());
+    }
   }
 
   public void fillAllAircrafts(int ammoStore){
@@ -24,7 +28,7 @@ public class Carrier {
   public void carrierFight(Carrier carrier){
     //for ( : carrierAircrafts) {
 
-    
+
   }
 
 }

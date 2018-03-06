@@ -6,5 +6,6 @@ public class F35 extends Aircrafts {
     super();
     setBaseDamage(50);
     setMaxAmmo(12);
+    setType("F35");
   }
 }

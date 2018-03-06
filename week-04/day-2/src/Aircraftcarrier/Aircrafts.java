@@ -4,6 +4,7 @@ public class Aircrafts {
   private int maxAmmo;
   private int baseDamage;
   private int ammoStore;
+  private String type;
 
 
   public Aircrafts() {
@@ -33,20 +34,21 @@ public class Aircrafts {
     this.baseDamage = baseDamage;
   }
 
-  public String getType() {
-    if (this instanceof F35) {
-      return "F35";
-    } else {
-      return "F16";
-    }
-  }
 
   public void setAmmoStore(int ammoStore) {
     this.ammoStore = ammoStore;
   }
 
-  public String getStatus(){
+  public String getStatus() {
     return "Type " + getType() + ", Ammo: " + ammoStore + ", Base Damage: " + baseDamage +
             " All damage: " + fight();
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public String getType() {
+    return type;
   }
 }
