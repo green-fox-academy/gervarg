@@ -30,7 +30,7 @@ public class Carrier {
         carrierAircrafts.get(i).refill(ammoStore);
       } else if (ammoStore < carrierAircrafts.get(i).refill(ammoStore)) {
         if (planecheck.getType().equals("F35")) {
-          carrierAircrafts.get(i).refill(ammoStore);
+          carrierAircrafts.get(i).refill(ammoStore); //missing the refill of ramaining ammo to F16's
         }
       } else if (ammoStore == 0) {
         System.out.println("There is no ammo to refill");
@@ -47,8 +47,8 @@ public class Carrier {
   }
 
   public void carrierFight(Carrier enemyCarrier) {
-    int enemyHealth = enemyCarrier.carrierHealth;
-    enemyHealth -= totalDamage();
+    int enemyHealth = enemyCarrier.carrierHealth;   //carrier fight is not done from other side yet
+    enemyHealth -= totalDamage();                   //and problem can be with different sizes of flocks
     if (enemyHealth <= 0) {
       System.out.println("It's dead Jim :(");
     }
