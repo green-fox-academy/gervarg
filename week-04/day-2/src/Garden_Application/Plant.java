@@ -3,7 +3,7 @@ package Garden_Application;
 public class Plant {
   private String nameOfPlant;
   private String colorOfPlant;
-  private double wateringAmount;
+  private double waterLevel;
 
   public Plant() {
 
@@ -12,34 +12,31 @@ public class Plant {
   public Plant(String nameOfPlant, String colorOfPlant, double wateringAmount) {
     this.nameOfPlant = nameOfPlant;
     this.colorOfPlant = colorOfPlant;
-    this.wateringAmount = wateringAmount;
+    this.waterLevel = wateringAmount;
   }
 
-  public void plantInformation(){
-
+  public boolean wateringNeeded() {
+    if (this instanceof Flower) {
+      return waterLevel < ((Flower) this).getWateringNeed();
+    } else {
+      return waterLevel < ((Tree) this).getWateringNeed();
+    }
   }
+
 
   public String getNameOfPlant() {
     return nameOfPlant;
-  }
-
-  public void setNameOfPlant(String nameOfPlant) {
-    this.nameOfPlant = nameOfPlant;
   }
 
   public String getColorOfPlant() {
     return colorOfPlant;
   }
 
-  public void setColorOfPlant(String colorOfPlant) {
-    this.colorOfPlant = colorOfPlant;
+  public double getWaterLevel() {
+    return waterLevel;
   }
 
-  public double getWateringAmount() {
-    return wateringAmount;
-  }
-
-  public void setWateringAmount(int wateringAmount) {
-    this.wateringAmount = wateringAmount;
+  public void setWaterLevel(double waterLevel) {
+    this.waterLevel = waterLevel;
   }
 }
