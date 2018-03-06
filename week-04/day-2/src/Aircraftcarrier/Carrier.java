@@ -18,6 +18,8 @@ public class Carrier {
       carrierAircrafts.add(new F35());
     } else if (aircraftType.equals("F16")) {
       carrierAircrafts.add(new F16());
+    } else {
+      System.out.println("There is no such plane");
     }
   }
 
