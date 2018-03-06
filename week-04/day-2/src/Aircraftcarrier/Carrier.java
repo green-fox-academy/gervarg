@@ -8,27 +8,59 @@ public class Carrier {
   private int ammoStore;
   private int carrierHealth;
 
-  public Carrier(int ammoStore, int carrierHealth){
+  public Carrier(int ammoStore, int carrierHealth) {
     this.ammoStore = ammoStore;
     this.carrierHealth = carrierHealth;
   }
 
-  public void addAircraft(String aircraftType){
-    if (aircraftType.equals("F35")){
+  public void addAircraft(String aircraftType) {
+    if (aircraftType.equals("F35")) {
       carrierAircrafts.add(new F35());
-    } else if (aircraftType.equals("F16")){
+    } else if (aircraftType.equals("F16")) {
       carrierAircrafts.add(new F16());
     }
   }
 
-  public void fillAllAircrafts(int ammoStore){
+  public void fillAllAircrafts(int ammoStore) {
+    for (int i = 0; i < carrierAircrafts.size(); i++) {
+      Aircrafts planecheck = carrierAircrafts.get(i);
+      if (ammoStore > carrierAircrafts.get(i).refill(ammoStore)) {
+        carrierAircrafts.get(i).refill(ammoStore);
+      } else if (ammoStore < carrierAircrafts.get(i).refill(ammoStore)) {
+        if (planecheck.getType().equals("F35")) {
+          carrierAircrafts.get(i).refill(ammoStore);
+        }
 
+      } else if (ammoStore == 0) {
+        System.out.println("There is no ammo to refill");
+      }
+    }
   }
 
-  public void carrierFight(Carrier carrier){
-    //for ( : carrierAircrafts) {
+  public int totalDamage() {
+    int totalDamage = 0;
+    for (int i = 0; i < carrierAircrafts.size(); i++) {
+      totalDamage += carrierAircrafts.get(i).fight();
+    }
+    return totalDamage;
+  }
 
+  public void carrierFight(Carrier enemyCarrier) {
+    int enemyHealth = enemyCarrier.carrierHealth;
+    enemyHealth -= totalDamage();
+    if (enemyHealth <= 0) {
+      System.out.println("It's dead Jim :(");
+    }
+  }
 
+  public String getStatus() {
+    String result = "";
+    result = "HP: " + carrierHealth + ", Aircraft count: " + carrierAircrafts.size() + " Ammo Storage: " + ammoStore +
+            ", Total Damage " + totalDamage() + "\n";
+    for (int i = 0; i < carrierAircrafts.size(); i++) {
+      result += carrierAircrafts.get(i).getStatus();
+    }
+    return result;
   }
 
 }

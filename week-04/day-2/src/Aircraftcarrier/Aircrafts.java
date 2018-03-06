@@ -41,7 +41,7 @@ public class Aircrafts {
 
   public String getStatus() {
     return "Type " + getType() + ", Ammo: " + ammoStore + ", Base Damage: " + baseDamage +
-            " All damage: " + fight();
+            " All damage: " + fight() + "\n";
   }
 
   public void setType(String type) {
