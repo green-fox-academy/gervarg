@@ -30,7 +30,6 @@ public class Carrier {
         if (planecheck.getType().equals("F35")) {
           carrierAircrafts.get(i).refill(ammoStore);
         }
-
       } else if (ammoStore == 0) {
         System.out.println("There is no ammo to refill");
       }
@@ -54,13 +53,12 @@ public class Carrier {
   }
 
   public String getStatus() {
-    String result = "";
-    result = "HP: " + carrierHealth + ", Aircraft count: " + carrierAircrafts.size() + " Ammo Storage: " + ammoStore +
-            ", Total Damage " + totalDamage() + "\n";
+    String status = "HP: " + carrierHealth + ", Aircraft count: " + carrierAircrafts.size() + " Ammo Storage: "
+            + ammoStore + ", Total Damage " + totalDamage() + "\n" + "Aircrafts:\n";
     for (int i = 0; i < carrierAircrafts.size(); i++) {
-      result += carrierAircrafts.get(i).getStatus();
+      status += carrierAircrafts.get(i).getStatus();
     }
-    return result;
+    return status;
   }
 
 }

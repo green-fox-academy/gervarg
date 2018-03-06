@@ -25,6 +25,7 @@ public class Main {
     midway.addAircraft("F35");
     midway.addAircraft("F16");
     midway.addAircraft("F16");
+    midway.fillAllAircrafts(2000);
     System.out.println(midway.getStatus());
 
   }

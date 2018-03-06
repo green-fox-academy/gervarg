@@ -21,7 +21,6 @@ public class Aircrafts {
 
   public int fight() {
     int damage = baseDamage * ammoStore;
-    setAmmoStore(0);
     return damage;
   }
 
