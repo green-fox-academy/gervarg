@@ -21,6 +21,6 @@ public class Shifter implements CharSequence {
 
   @Override
   public CharSequence subSequence(int start, int end) {
-    return null;
+    return shifter.subSequence(start + numberOfShifting, end + numberOfShifting);
   }
 }

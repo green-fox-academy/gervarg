@@ -3,9 +3,10 @@ package Charsequence;
 public class Gnirts implements CharSequence {
   String charFromBehind;
 
-  public Gnirts(String charSquence){
+  public Gnirts(String charSquence) {
     this.charFromBehind = charSquence;
   }
+
   @Override
   public int length() {
     return charFromBehind.length();
@@ -18,7 +19,7 @@ public class Gnirts implements CharSequence {
 
   @Override
   public CharSequence subSequence(int start, int end) {
-    return null;
+    return charFromBehind.subSequence(charFromBehind.length() - end - 1, charFromBehind.length() - start);
   }
 
 }
