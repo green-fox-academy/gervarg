@@ -18,6 +18,10 @@ public class Dominoes {
     // the order of your dominoes should look like this: [[1,5], [2,4], [4,6], [5,2], [6,7], [7,1]]
     Collections.sort(dominoes);
     System.out.println(dominoes);
+    for (Domino d : dominoes) {
+      d.printAllFields();
+    }
+
 
 
   }
