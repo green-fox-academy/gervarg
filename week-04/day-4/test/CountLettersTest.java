@@ -8,12 +8,12 @@ public class CountLettersTest {
   @Test
   public void countLettersTestForLetter() {
     String text = "Let there be anarchy";
-    assertEquals((Integer) 4, letters.countLetters(text).get((Character) 'e'));
+    assertEquals((Integer) 4, letters.countLetters(text).get('e'));
   }
 
   @Test
   public void countLettersTestWithWhiteSpace() {
     String text = "Let there be anarchy";
-    assertEquals((Integer) 3, letters.countLetters(text).get((Character) ' '));
+    assertEquals((Integer) 3, letters.countLetters(text).get(' '));
   }
 }
