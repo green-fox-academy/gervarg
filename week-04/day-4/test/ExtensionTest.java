@@ -13,22 +13,22 @@ class ExtensionTest {
 
   @Test
   void testAdd_2and3is5() {
-    assertEquals(5, extension.add(2, 3));
+    assertEquals(6, extension.add(3, 3));
   }
 
   @Test
   void testAdd_1and4is5() {
-    assertEquals(5, extension.add(1, 4));
+    assertEquals(8, extension.add(1, 7));
   }
 
   @Test
   void testMaxOfThree_first() {
-    assertEquals(5, extension.maxOfThree(5, 4, 3));
+    assertEquals(6, extension.maxOfThree(5, 4, 6));
   }
 
   @Test
   void testMaxOfThree_third() {
-    assertEquals(5, extension.maxOfThree(3, 4, 5));
+    assertEquals(7, extension.maxOfThree(3, 7, 5));
   }
 
   @Test
