@@ -5,7 +5,7 @@ import java.util.Map;
 public class CountLetters {
 
   public Map<Character, Integer> countLetters(String input) {
-    Map<Character, Integer> collectionOFLetters = new HashMap<Character, Integer>();
+    Map<Character, Integer> collectionOFLetters = new HashMap<>();
     char[] arrayOfChars = input.toCharArray();
     char ch;
     for (int i = 0; i < input.length(); i++) {
