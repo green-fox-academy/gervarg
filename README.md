@@ -3,6 +3,9 @@
 
 *Junior Software/Hardware Programming Course ( 12/2/2018 - ??/6/2018 )*
 
+[TODO App reposiroty](https://github.com/gervarg/todo-app)
+
+
 ## Week - 01
 
 ### Day 01:
@@ -22,15 +25,4 @@
 ### Day 05:
 * 
 
-## Week - 02
 
-### Day 01:
-* 
-### Day 02:
-* 
-### Day 03:
-* 
-### Day 04:
-* 
-### Day 05:
-* 
