@@ -11,4 +11,27 @@ public class AnagramTest {
     String word2 = "kkoge";
     assertTrue(anagram.anagram(word1,word2));
   }
+
+  @Test
+  public void anagramWhitespace() {
+    String word1 = "hello world";
+    String word2 = "drlwo olleh";
+    assertTrue(anagram.anagram(word1,word2));
+  }
+  @Test
+  public void anagramFalseTest() {
+    String word1 = "okkeyy";
+    String word2 = "kkeyy";
+    assertFalse(anagram.anagram(word1,word2));
+  }
+
+  @Test
+  public void anagramNull(){
+    String word1 = "";
+    String word2 = "";
+    assertTrue(anagram.anagram(word1,word2));
+  }
+
+
+
 }
