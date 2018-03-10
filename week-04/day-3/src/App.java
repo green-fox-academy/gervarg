@@ -3,8 +3,8 @@ import main.java.music.*;
 public class App {
   public static void main(String[] args) {
     System.out.println("Test 1, create Electric Guitar, Bass Guitar and Violin with default strings.");
-    Electric_Guitar guitar = new Electric_Guitar();
-    Bass_Guitar bassGuitar = new Bass_Guitar();
+    ElectricGuitar guitar = new ElectricGuitar();
+    BassGuitar bassGuitar = new BassGuitar();
     Violin violin = new Violin();
 
     System.out.println("Test 1 Play");
@@ -13,8 +13,8 @@ public class App {
     violin.play();
 
     System.out.println("Test 2, create Electric Guitar, Bass Guitar with 7 and 5 strings.");
-    Electric_Guitar guitar2 = new Electric_Guitar(7);
-    Bass_Guitar bassGuitar2 = new Bass_Guitar(5);
+    ElectricGuitar guitar2 = new ElectricGuitar(7);
+    BassGuitar bassGuitar2 = new BassGuitar(5);
 
     System.out.println("Test 2 Play");
     guitar2.play();
