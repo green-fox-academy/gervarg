@@ -25,13 +25,16 @@ public class AnagramTest {
     assertFalse(anagram.anagram(word1,word2));
   }
 
-  @Test
+  @Test (expected = NullPointerException.class)
   public void anagramNull(){
+    String word1 = null;
+    String word2 = null;
+    assertTrue(anagram.anagram(word1,word2));
+  }
+  @Test
+  public void anagramEmptyStrings(){
     String word1 = "";
     String word2 = "";
     assertTrue(anagram.anagram(word1,word2));
   }
-
-
-
 }
