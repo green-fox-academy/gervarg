@@ -2,8 +2,8 @@ package flyable;
 
 public class Helicopter extends Vehicle implements Flyable {
 
-  public Helicopter(String name){
-    this.name = name;
+  public Helicopter(String helicopterName){
+    super(helicopterName);
   }
   @Override
   public void fly() {
@@ -12,11 +12,11 @@ public class Helicopter extends Vehicle implements Flyable {
 
   @Override
   public void land() {
-    System.out.println(name + " lands vertically");
+    System.out.println(getVehicleName() + " lands vertically");
   }
 
   @Override
   public void takeOff() {
-    System.out.println(name + " takes off from the same position");
+    System.out.println(getVehicleName() + " takes off from the same position");
   }
 }
