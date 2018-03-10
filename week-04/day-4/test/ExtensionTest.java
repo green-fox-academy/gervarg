@@ -23,7 +23,7 @@ class ExtensionTest {
 
   @Test
   void testMaxOfThree_first() {
-    assertEquals(6, extension.maxOfThree(5, 4, 6));
+    assertEquals(10, extension.maxOfThree(2, 3, 10));
   }
 
   @Test

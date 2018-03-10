@@ -10,8 +10,7 @@ public class Anagram {
       Arrays.sort(charsOfWord1);
       Arrays.sort(charsOfWord2);
       return Arrays.equals(charsOfWord1,charsOfWord2);
-    }
-    else {
+    } else {
       return false;
     }
   }

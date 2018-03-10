@@ -10,14 +10,17 @@ public class Extension {
   }
 
   int maxOfThree(int a, int b, int c) {
-    if (a > b && a > c)
-      return a;
-    else if (c > a && c > b)
-      return c;
-    else
+    if (a > b) {
+      if (a > c) {
+        return a;
+      } else {
+        return c;
+      }
+    } else if (b > c) {
       return b;
+    }
+    return c;
   }
-
   int median(List<Integer> pool) {
     int median = 0;
     for (int i = 0; i < pool.size(); i++) {
