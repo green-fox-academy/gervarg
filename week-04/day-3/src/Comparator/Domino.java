@@ -22,7 +22,10 @@ public class Domino implements Comparable<Domino>, Printable{
   public int compareTo(Domino o) {
     if (values[0] > o.values[0] ){
       return 1;
-    } else {
+    } else if (values[0] == o.values[0]){
+      return 0;
+    }
+    else {
       return -1;
     }
   }
