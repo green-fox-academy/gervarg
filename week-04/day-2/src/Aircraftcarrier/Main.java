@@ -2,7 +2,7 @@ package Aircraftcarrier;
 
 public class Main {
   public static void main(String[] args) {
-    airCraftTesting();
+    //airCraftTesting();
     carrierTesting();
 
 
@@ -25,9 +25,18 @@ public class Main {
     midway.addAircraft("F35");
     midway.addAircraft("F16");
     midway.addAircraft("F16");
-    midway.fillAllAircrafts(2000);
+    midway.fillAllAircrafts();
     System.out.println(midway.getStatus());
-
+    Carrier lexington = new Carrier(2000, 2200);
+    lexington.addAircraft("F35");
+    lexington.addAircraft("F35");
+    lexington.addAircraft("F35");
+    lexington.addAircraft("F16");
+    lexington.addAircraft("F16");
+    lexington.fillAllAircrafts();
+    System.out.println(lexington.getStatus());
+    midway.carrierFight(lexington);
+    System.out.println(midway.getStatus());
   }
 
 }

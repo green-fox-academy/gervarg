@@ -23,17 +23,17 @@ public class Carrier {
     }
   }
 
-  public void fillAllAircrafts(int ammoStore) {
-    for (int i = 0; i < carrierAircrafts.size(); i++) {
-      Aircrafts planecheck = carrierAircrafts.get(i);
-      if (ammoStore > carrierAircrafts.get(i).refill(ammoStore)) {
-        ammoStore -= carrierAircrafts.get(i).refill(ammoStore);
-      } else if (ammoStore < carrierAircrafts.get(i).refill(ammoStore)) {
+  public void fillAllAircrafts() {
+    if (ammoStore <= 0) {
+      System.out.println("Sorry pal we're outta ammo");
+    } else {
+      for (int i = 0; i < carrierAircrafts.size(); i++) {
+        Aircrafts planecheck = carrierAircrafts.get(i);
         if (planecheck.getType().equals("F35")) {
-          ammoStore -= carrierAircrafts.get(i).refill(ammoStore); //missing the refill of ramaining ammo to F16's
+          ammoStore -= carrierAircrafts.get(i).refill(ammoStore);
+        } else {
+          ammoStore -= carrierAircrafts.get(i).refill(ammoStore);
         }
-      } else if (ammoStore <= 0) {
-        System.out.println("There is no ammo to refill");
       }
     }
   }
@@ -48,13 +48,14 @@ public class Carrier {
 
   public void carrierFight(Carrier enemyCarrier) {
     int enemyHealth = enemyCarrier.carrierHealth;
-    enemyHealth -= totalDamage();                   
+    enemyHealth -= totalDamage();
     carrierHealth -= enemyCarrier.totalDamage();
+    setCarrierHealth(carrierHealth);
+    enemyCarrier.setCarrierHealth(enemyHealth);
     if (enemyHealth <= 0) {
       System.out.println("We've destroyed the enemy!");
-      setCarrierHealth(carrierHealth);
-    }
-    else if (carrierHealth <= 0){
+
+    } else if (carrierHealth <= 0) {
       System.out.println("It's dead Jim :(");
     }
   }
@@ -70,5 +71,9 @@ public class Carrier {
 
   public void setCarrierHealth(int carrierHealth) {
     this.carrierHealth = carrierHealth;
+  }
+
+  public void setAmmoStore(int ammoStore) {
+    this.ammoStore = ammoStore;
   }
 }
