@@ -19,7 +19,7 @@ public class Main {
   }
 
   public static void carrierTesting(){
-    Carrier midway = new Carrier(2300, 5000 );
+    Carrier midway = new Carrier(40, 5000 );
     midway.addAircraft("F35");
     midway.addAircraft("F35");
     midway.addAircraft("F35");

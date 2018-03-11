@@ -30,9 +30,9 @@ public class Carrier {
       for (int i = 0; i < carrierAircrafts.size(); i++) {
         Aircrafts planecheck = carrierAircrafts.get(i);
         if (planecheck.getType().equals("F35")) {
-          ammoStore -= carrierAircrafts.get(i).refill(ammoStore);
+          ammoStore = carrierAircrafts.get(i).refill(ammoStore);
         } else {
-          ammoStore -= carrierAircrafts.get(i).refill(ammoStore);
+          ammoStore = carrierAircrafts.get(i).refill(ammoStore);
         }
       }
     }

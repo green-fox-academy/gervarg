@@ -3,25 +3,27 @@ package Aircraftcarrier;
 public class Aircrafts {
   private int maxAmmo;
   private int baseDamage;
-  private int ammoStore;
+  private int currentAmmo;
   private String type;
 
 
   public Aircrafts() {
-    this.ammoStore = 0;
+    this.currentAmmo = 0;
   }
 
   public int refill(int storageOfAmmo) {
-    if (ammoStore < maxAmmo) {
-      storageOfAmmo = storageOfAmmo - (maxAmmo - ammoStore);
-      setAmmoStore(maxAmmo);
+    if (storageOfAmmo <= maxAmmo - currentAmmo) {
+      currentAmmo += storageOfAmmo;
+      storageOfAmmo = 0;
+    } else{
+      storageOfAmmo = storageOfAmmo - (maxAmmo - currentAmmo);
+      setCurrentAmmo(maxAmmo);
     }
     return storageOfAmmo;
   }
 
   public int fight() {
-    int damage = baseDamage * ammoStore;
-    return damage;
+    return baseDamage * currentAmmo;
   }
 
 
@@ -34,12 +36,12 @@ public class Aircrafts {
   }
 
 
-  public void setAmmoStore(int ammoStore) {
-    this.ammoStore = ammoStore;
+  public void setCurrentAmmo(int currentAmmo) {
+    this.currentAmmo = currentAmmo;
   }
 
   public String getStatus() {
-    return "Type " + getType() + ", Ammo: " + ammoStore + ", Base Damage: " + baseDamage +
+    return "Type " + getType() + ", Ammo: " + currentAmmo + ", Base Damage: " + baseDamage +
             " All damage: " + fight() + "\n";
   }
 
