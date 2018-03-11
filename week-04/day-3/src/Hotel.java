@@ -6,6 +6,5 @@ public class Hotel {
     for (int i = 0; i < 10; i++) {
       christmas.reservationLine();
     }
-
   }
 }

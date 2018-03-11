@@ -14,9 +14,9 @@ public class Carrier {
   }
 
   public void addAircraft(String aircraftType) {
-    if (aircraftType.equals("F35")) {
+    if (aircraftType.toUpperCase().equals("F35")) {
       carrierAircrafts.add(new F35());
-    } else if (aircraftType.equals("F16")) {
+    } else if (aircraftType.toUpperCase().equals("F16")) {
       carrierAircrafts.add(new F16());
     } else {
       System.out.println("There is no such plane");
@@ -47,9 +47,14 @@ public class Carrier {
   }
 
   public void carrierFight(Carrier enemyCarrier) {
-    int enemyHealth = enemyCarrier.carrierHealth;   //carrier fight is not done from other side yet
-    enemyHealth -= totalDamage();                   //and problem can be with different sizes of flocks
+    int enemyHealth = enemyCarrier.carrierHealth;
+    enemyHealth -= totalDamage();                   
+    carrierHealth -= enemyCarrier.totalDamage();
     if (enemyHealth <= 0) {
+      System.out.println("We've destroyed the enemy!");
+      setCarrierHealth(carrierHealth);
+    }
+    else if (carrierHealth <= 0){
       System.out.println("It's dead Jim :(");
     }
   }
@@ -63,4 +68,7 @@ public class Carrier {
     return status;
   }
 
+  public void setCarrierHealth(int carrierHealth) {
+    this.carrierHealth = carrierHealth;
+  }
 }
