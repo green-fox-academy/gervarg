@@ -16,10 +16,11 @@ public class Exercise_12_EncodedLines {
     List<String> encodedText = fileRead(fileName); // i need ansi value -1
     String lines;
     String decodedLines = "";
+    char whiteSpace = 32;
     for (int i = 0; i < encodedText.size(); i++) {
       lines = encodedText.get(i);
       for (int j = 0; j < lines.length(); j++) {
-        if (lines.charAt(j) != 32) {
+        if (lines.charAt(j) != whiteSpace) {
           decodedLines += (char) (lines.charAt(j) - 1);
         } else {
           decodedLines += " ";
