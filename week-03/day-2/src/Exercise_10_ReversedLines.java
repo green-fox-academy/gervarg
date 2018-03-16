@@ -15,10 +15,9 @@ public class Exercise_10_ReversedLines {
     Path filePath = Paths.get(newFile);
     try {
       Files.write(filePath, messageToWrite);
-    } catch (IOException e){
+    } catch (IOException e) {
       System.out.println("Could not write to file");
     }
-
   }
 
   private static List<String> reverseLines(String fileName) {
