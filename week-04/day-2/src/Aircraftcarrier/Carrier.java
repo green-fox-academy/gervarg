@@ -72,8 +72,4 @@ public class Carrier {
   public void setCarrierHealth(int carrierHealth) {
     this.carrierHealth = carrierHealth;
   }
-
-  public void setAmmoStore(int ammoStore) {
-    this.ammoStore = ammoStore;
-  }
 }
