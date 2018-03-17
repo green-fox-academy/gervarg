@@ -8,6 +8,7 @@ import static javax.swing.JFrame.EXIT_ON_CLOSE;
 public class Sierpinsky {
   static int LIMIT = 7;
   static int ITERATOR = 0;
+  static int COLOR_INDEX = 256;
   public static void mainDraw(Graphics graphics){
 
     int size = WIDTH/3;
@@ -21,15 +22,15 @@ public class Sierpinsky {
   }
   private static Color getRandomColor() {
     Random random = new Random();
-    int r = random.nextInt(256);
-    int g = random.nextInt(256);
-    int b = random.nextInt(256);
+    int r = random.nextInt(COLOR_INDEX);
+    int g = random.nextInt(COLOR_INDEX);
+    int b = random.nextInt(COLOR_INDEX);
     return new Color(r, g, b);
 
   }
 
   private static void sierpinsky(int x, int y, Graphics g, int n, int size, int iterator){
-    //g.setColor(getRandomColor());
+    g.setColor(getRandomColor());
     g.fillRect(x,y,size,size);
     if ( n == LIMIT ) {
       return;
