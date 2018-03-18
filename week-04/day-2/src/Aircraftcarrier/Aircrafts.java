@@ -4,6 +4,7 @@ public class Aircrafts {
   private int maxAmmo;
   private int baseDamage;
   private int currentAmmo;
+  private int ammoBeforeFight;
   private String type;
 
 
@@ -23,7 +24,10 @@ public class Aircrafts {
   }
 
   public int fight() {
-    return baseDamage * currentAmmo;
+    int maxDamage = baseDamage * currentAmmo;
+    ammoBeforeFight = currentAmmo;
+    setCurrentAmmo(0);
+    return maxDamage;
   }
 
 
@@ -41,7 +45,7 @@ public class Aircrafts {
   }
 
   public String getStatus() {
-    return "Type " + getType() + ", Ammo: " + currentAmmo + ", Base Damage: " + baseDamage +
+    return "Type " + getType() + ", Ammo: " + ammoBeforeFight + ", Base Damage: " + baseDamage +
             " All damage: " + fight() + "\n";
   }
 

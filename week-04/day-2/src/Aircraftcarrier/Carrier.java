@@ -27,21 +27,31 @@ public class Carrier {
     if (ammoStore <= 0) {
       System.out.println("Sorry pal we're outta ammo");
     } else {
-      for (int i = 0; i < carrierAircrafts.size(); i++) {
-        Aircrafts planecheck = carrierAircrafts.get(i);
-        if (planecheck.getType().equals("F35")) {
-          ammoStore = carrierAircrafts.get(i).refill(ammoStore);
-        } else {
-          ammoStore = carrierAircrafts.get(i).refill(ammoStore);
-        }
+      fillF35Planes();
+      fillF16Planes();
+    }
+  }
+
+  public void fillF35Planes() {
+    for (Aircrafts f35Planes : carrierAircrafts) {
+      if (f35Planes.getType().equals("F35")) {
+        ammoStore = f35Planes.refill(ammoStore);
+      }
+    }
+  }
+
+  public void fillF16Planes() {
+    for (Aircrafts f16Planes : carrierAircrafts) {
+      if (f16Planes.getType().equals("F16")) {
+        ammoStore = f16Planes.refill(ammoStore);
       }
     }
   }
 
   public int totalDamage() {
     int totalDamage = 0;
-    for (int i = 0; i < carrierAircrafts.size(); i++) {
-      totalDamage += carrierAircrafts.get(i).fight();
+    for (Aircrafts carrierAircraft : carrierAircrafts) {
+      totalDamage += carrierAircraft.fight();
     }
     return totalDamage;
   }
