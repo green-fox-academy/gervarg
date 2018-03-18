@@ -10,24 +10,23 @@ public class Aircrafts {
 
   public Aircrafts() {
     this.currentAmmo = 0;
+    this.ammoBeforeFight = currentAmmo;
   }
 
   public int refill(int storageOfAmmo) {
     if (storageOfAmmo <= maxAmmo - currentAmmo) {
-      currentAmmo += storageOfAmmo;
+      setCurrentAmmo(currentAmmo += storageOfAmmo);
       storageOfAmmo = 0;
-    } else{
+    } else {
       storageOfAmmo = storageOfAmmo - (maxAmmo - currentAmmo);
       setCurrentAmmo(maxAmmo);
     }
+    setAmmoBeforeFight(currentAmmo);
     return storageOfAmmo;
   }
 
   public int fight() {
-    int maxDamage = baseDamage * currentAmmo;
-    ammoBeforeFight = currentAmmo;
-    setCurrentAmmo(0);
-    return maxDamage;
+    return baseDamage * currentAmmo;
   }
 
 
@@ -35,13 +34,16 @@ public class Aircrafts {
     this.maxAmmo = maxAmmo;
   }
 
-  public void setBaseDamage(int baseDamage) {
-    this.baseDamage = baseDamage;
+  public void setAmmoBeforeFight(int ammoBeforeFight) {
+    this.ammoBeforeFight = ammoBeforeFight;
   }
-
 
   public void setCurrentAmmo(int currentAmmo) {
     this.currentAmmo = currentAmmo;
+  }
+
+  public void setBaseDamage(int baseDamage) {
+    this.baseDamage = baseDamage;
   }
 
   public String getStatus() {
