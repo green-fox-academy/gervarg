@@ -4,6 +4,7 @@
 *Junior Software/Hardware Programming Course ( 12/2/2018 - ??/6/2018 )*
 
 [TODO App reposiroty](https://github.com/gervarg/todo-app)
+
 [Wanderer game](https://github.com/gervarg/wanderer-java)
 
 
