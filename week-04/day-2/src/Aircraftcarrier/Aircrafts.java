@@ -4,13 +4,13 @@ public class Aircrafts {
   private int maxAmmo;
   private int baseDamage;
   private int currentAmmo;
-  private int ammoBeforeFight;
+  //private int ammoBeforeFight;
   private String type;
 
 
   public Aircrafts() {
     this.currentAmmo = 0;
-    this.ammoBeforeFight = currentAmmo;
+    //this.ammoBeforeFight = currentAmmo;
   }
 
   public int refill(int storageOfAmmo) {
@@ -21,7 +21,7 @@ public class Aircrafts {
       storageOfAmmo = storageOfAmmo - (maxAmmo - currentAmmo);
       setCurrentAmmo(maxAmmo);
     }
-    setAmmoBeforeFight(currentAmmo);
+    //setAmmoBeforeFight(currentAmmo);
     return storageOfAmmo;
   }
 
@@ -34,9 +34,9 @@ public class Aircrafts {
     this.maxAmmo = maxAmmo;
   }
 
-  public void setAmmoBeforeFight(int ammoBeforeFight) {
+  /*public void setAmmoBeforeFight(int ammoBeforeFight) {
     this.ammoBeforeFight = ammoBeforeFight;
-  }
+  }*/
 
   public void setCurrentAmmo(int currentAmmo) {
     this.currentAmmo = currentAmmo;
@@ -47,7 +47,7 @@ public class Aircrafts {
   }
 
   public String getStatus() {
-    return "Type " + getType() + ", Ammo: " + ammoBeforeFight + ", Base Damage: " + baseDamage +
+    return "Type " + getType() + ", Ammo: " + currentAmmo + ", Base Damage: " + baseDamage +
             " All damage: " + fight() + "\n";
   }
 
