@@ -10,7 +10,8 @@
 
 int main ()
 {
-    char user_data[200] = "Gergely Varga 33";
+    char user_data[200];
+    gets(user_data);
     char *first_name = strtok(user_data, " ");
     char *last_name = strtok(NULL, " ");
     int age = atoi(strtok(NULL, " "));
