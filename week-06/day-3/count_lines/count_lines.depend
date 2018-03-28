@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1522244183 source:c:\users\user\documents\greenfox\gervarg\week-06\day-3\count_lines\main.c
+	<stdio.h>
+	<string.h>
+
