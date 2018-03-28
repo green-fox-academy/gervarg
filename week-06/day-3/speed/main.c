@@ -6,7 +6,7 @@
 int main()
 {
     int seconds = 17;
-    float speed = (float)DISTANCE / seconds;
+    float speed = DISTANCE / seconds;
 
     printf("%f", speed);
 
