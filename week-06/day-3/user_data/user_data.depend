@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1522249343 source:c:\users\user\documents\greenfox\gervarg\week-06\day-3\user_data\main.c
+	<stdio.h>
+	<string.h>
+
