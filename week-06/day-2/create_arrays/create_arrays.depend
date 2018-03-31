@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1522501638 source:c:\users\user\documents\greenfox\gervarg\week-06\day-2\create_arrays\main.c
+	<stdio.h>
+	<math.h>
+	<stdlib.h>
+
