@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1522499785 source:c:\users\user\documents\greenfox\gervarg\week-06\day-2\strlen\main.c
+	<stdio.h>
+	<stdlib.h>
+

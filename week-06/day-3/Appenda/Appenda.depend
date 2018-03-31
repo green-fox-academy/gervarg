@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1522499028 source:c:\users\user\documents\greenfox\gervarg\week-06\day-3\appenda\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
