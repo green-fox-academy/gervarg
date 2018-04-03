@@ -27,7 +27,7 @@ int main()
 
 int *create_array(int size)
 {
-    char *array = malloc(size);
+    int *array = malloc(size * sizeof(int));
     if (!array)
         return 0;
     return array;
