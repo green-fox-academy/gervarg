@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define PI 3.14
+#include "pi_header.h"
 
 // define a variable called PI with the value of 3.14
 // create a function which takes the radius of a circle as a parameter
