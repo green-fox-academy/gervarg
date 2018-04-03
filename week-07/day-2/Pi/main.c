@@ -12,9 +12,15 @@ float circle_area(int radius)
     return radius * radius * PI;
 }
 
+float circumference(int radius)
+{
+    return 2 * radius * PI;
+}
+
 int main()
 {
     int radius = 3;
-    printf("%.2f", circle_area(radius));
+    printf("%.2f\n", circle_area(radius));
+    printf("%.2f\n", circumference(radius));
 	return 0;
 }
