@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1522770719 source:c:\users\user\documents\greenfox\gervarg\week-07\day-2\car_register\main.c
+	<string.h>
+	<stdio.h>
+	<time.h>
+	<stdlib.h>
+
