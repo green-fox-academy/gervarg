@@ -4,6 +4,8 @@
 #include "parser.h"
 #include "printer.h"
 #include "string.h"
+#include <Windows.h>
+
 
 int parser_port = -1;
 char **data = NULL;
@@ -112,13 +114,21 @@ int log_data()
 	// If there is no data on the port, then do nothing
 	char buff[PORT_BUFFER_LEN];
 	if (get_line_from_port(buff, PORT_BUFFER_LEN) > 0) {
-        all_data(buff, data);
+
+        static int counter = 0;
+        data = (char**)realloc(data, (counter+1)*sizeof(*data));
+        data[counter] = (char*)malloc(sizeof(buff));
+
+        strcpy(data[counter], buff);
+        printf("%s\n", data[counter]);
+        counter++;
         // Put the data into the logfile
         //Printing the buffer
         /*char *ptr;
         ptr = strtok(buff, ".");
         if((strtol(ptr, NULL, 16) < 2018) || (strtol(ptr, NULL, 16) > 1980))*/
         printf("%s\n",buff);
+
 	}
 
 	return 0;
@@ -127,10 +137,12 @@ int log_data()
 void all_data(char *unfiltered_data, char **data)
 {
     static int counter = 0;
+    data = (char**)realloc(data, (counter+1)*sizeof(*data));
+    data[counter] = (char*)malloc(sizeof(unfiltered_data));
+
+    strcpy(data[counter], unfiltered_data);
+    printf("%s\n", data[counter]);
     counter++;
-    data = (char**)realloc(data, (counter)*sizeof(*data));
-    data[counter-1] = (char*)malloc(sizeof(unfiltered_data));
-    strcpy(data[counter-1], *unfiltered_data);
 }
 
 void write_logs(char *lines)

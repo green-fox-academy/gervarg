@@ -34,9 +34,9 @@
 	"printer.h"
 	"parser.h"
 
-1522942690 c:\users\user\documents\greenfox\gervarg\week-07\day-4\temp_logger\blackbox\parser.h
+1522945400 c:\users\user\documents\greenfox\gervarg\week-07\day-4\temp_logger\blackbox\parser.h
 
-1522943207 source:c:\users\user\documents\greenfox\gervarg\week-07\day-4\temp_logger\blackbox\parser.c
+1522944376 source:c:\users\user\documents\greenfox\gervarg\week-07\day-4\temp_logger\blackbox\parser.c
 	<stdio.h>
 	<time.h>
 	"rs232/rs232.h"
