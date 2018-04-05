@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1522925212 source:c:\users\user\documents\greenfox\gervarg\week-07\day-4\temp_logger\blackbox\printer.c
+1519896918 source:c:\users\user\documents\greenfox\gervarg\week-07\day-4\temp_logger\blackbox\printer.c
 	<stdio.h>
 	<string.h>
 	"printer.h"
@@ -26,7 +26,7 @@
 	<stdio.h>
 	<string.h>
 
-1522926102 source:c:\users\user\documents\greenfox\gervarg\week-07\day-4\temp_logger\blackbox\main.c
+1522934410 source:c:\users\user\documents\greenfox\gervarg\week-07\day-4\temp_logger\blackbox\main.c
 	<stdio.h>
 	<stdlib.h>
 	<conio.h>
@@ -34,9 +34,9 @@
 	"printer.h"
 	"parser.h"
 
-1522932294 c:\users\user\documents\greenfox\gervarg\week-07\day-4\temp_logger\blackbox\parser.h
+1522942690 c:\users\user\documents\greenfox\gervarg\week-07\day-4\temp_logger\blackbox\parser.h
 
-1522932308 source:c:\users\user\documents\greenfox\gervarg\week-07\day-4\temp_logger\blackbox\parser.c
+1522943207 source:c:\users\user\documents\greenfox\gervarg\week-07\day-4\temp_logger\blackbox\parser.c
 	<stdio.h>
 	<time.h>
 	"rs232/rs232.h"

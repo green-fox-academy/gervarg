@@ -10,13 +10,17 @@ int open_port();
 int close_port();
 int log_data();
 int list_data();
-char *temp_lines;
+void all_data(char*,char**);
+void write_logs(char*);
+
+
+/*char *temp_lines;
 typedef struct {
   char *dataptr;
   unsigned int length;
 } Temp_data;
 
-/*Temp_data *data;
+Temp_data *data;
 data->length = 0;
 data->dataptr = NULL;*/
 

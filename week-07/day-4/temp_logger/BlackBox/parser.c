@@ -6,7 +6,7 @@
 #include "string.h"
 
 int parser_port = -1;
-
+char **data = NULL;
 
 int get_port_name()
 {
@@ -112,22 +112,35 @@ int log_data()
 	// If there is no data on the port, then do nothing
 	char buff[PORT_BUFFER_LEN];
 	if (get_line_from_port(buff, PORT_BUFFER_LEN) > 0) {
-        //all_data(buff);
-		// Put the data into the logfile
+        all_data(buff, data);
+        // Put the data into the logfile
         //Printing the buffer
-		printf("%s\n",buff);
+        /*char *ptr;
+        ptr = strtok(buff, ".");
+        if((strtol(ptr, NULL, 16) < 2018) || (strtol(ptr, NULL, 16) > 1980))*/
+        printf("%s\n",buff);
 	}
 
 	return 0;
 }
 
-void all_data(char *unfiltered_data)
+void all_data(char *unfiltered_data, char **data)
 {
-    //data->length++;
-   // data->dataptr = unfiltered_data;
+    static int counter = 0;
+    counter++;
+    data = (char**)realloc(data, (counter)*sizeof(*data));
+    data[counter-1] = (char*)malloc(sizeof(unfiltered_data));
+    strcpy(data[counter-1], *unfiltered_data);
+}
 
-
-
+void write_logs(char *lines)
+{
+    FILE *fileptr;
+    fileptr = fopen("temp_log.txt", "w");
+    while(!feof(fileptr)) {
+        fprintf(fileptr,"%s\n", lines);
+    }
+    fclose(fileptr);
 }
 
 int list_data()
