@@ -40,7 +40,7 @@ int main()
 				close_port();
 				break;
             case 'k':
-                list_data();
+                //list_data();
                 break;
 			default:
 				break;

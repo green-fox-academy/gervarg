@@ -120,63 +120,65 @@ int log_data()
         char *temp = (char*) malloc(sizeof(buff));
         strcpy(temp, buff);
         char *ptr_filter = strtok(buff, ".");
-        char *year_ptr = (char*)malloc(sizeof(5));
-        year_ptr = ptr_filter;
-        char *month_ptr = (char*)malloc(sizeof(2));
-        char *day_ptr = (char*)malloc(sizeof(2));
-        char *hour_ptr = (char*)malloc(sizeof(2));
-        char *minute_ptr = (char*)malloc(sizeof(2));
-        char *second_ptr = (char*)malloc(sizeof(2));
-        char *temp_ptr = (char*)malloc(sizeof(6));
-        long month;
-        long day;
-        long hour;
-        long minute;
-        long second;
+
+        int month;
+        int day;
+        int hour;
+        int minute;
+        int second;
         int temperature_length;
         for (int i = 0; i < 6; i++){
             ptr_filter = strtok(NULL, ".: ");
             if (i == 0) {
+                char *month_ptr = (char*)malloc(sizeof(10));
                 month_ptr = ptr_filter;
-                month = strtol(month_ptr, NULL, 10);
+                month = atoi(month_ptr);
+                //month = strtol(month_ptr, NULL, 10);
                 free(month_ptr);
             }
             else if (i == 1){
+                char *day_ptr = (char*)malloc(sizeof(10));
                 day_ptr = ptr_filter;
-                day = strtol(day_ptr, NULL, 10);
+                day = atoi(day_ptr);
+                //day = strtol(day_ptr, NULL, 10);
                 free(day_ptr);
             }
             else if (i == 2){
+                char *hour_ptr = (char*)malloc(sizeof(10));
                 hour_ptr = ptr_filter;
-                hour = strtol(hour, NULL, 10);
+                hour = atoi(hour_ptr);
+                //hour = strtol(hour_ptr, NULL, 10);
                 free(hour_ptr);
             }
             else if (i == 3){
+                char *minute_ptr = (char*)malloc(sizeof(10));
                 minute_ptr = ptr_filter;
-                minute = strtol(minute_ptr, NULL, 10);
+                minute = atoi(minute_ptr);
+                //minute = strtol(minute_ptr, NULL, 10);
                 free(minute_ptr);
             }
             else if (i == 4) {
+                char *second_ptr = (char*)malloc(sizeof(10));
                 second_ptr = ptr_filter;
-                second = strtol(second_ptr, NULL, 10);
+                second = atoi(second_ptr);
+                //second = strtol(second_ptr, NULL, 10);
                 free(second_ptr);
             }
             else {
+                char *temp_ptr = (char*)malloc(sizeof(20));
                 temp_ptr = ptr_filter;
                 temperature_length = strlen(temp_ptr);
                 free(temp_ptr);
             }
-
         }
-        if (month > 0 && month < 12 && day > 0 && day < 32 && hour >= 0 && hour < 25 && minute >= 0 && minute < 60 && second >= 0 && second < 60 && temperature_length < 4){
+        if (month > 0 && month < 13 && day > 0 && day < 32 && hour >= 0 && hour < 25 && minute >= 0 && minute < 60 && second >= 0 && second < 60 && temperature_length < 4){
             printf("%s\n",temp);
             data = (char**)realloc(data, (counter+1)*sizeof(*data));
-            data[counter] = (char*)malloc(sizeof(buff));
-            strcpy(data[counter], buff);
+            data[counter] = (char*)malloc(sizeof(temp));
+            strcpy(data[counter], temp);
             counter++;
         }
             //printf("%s\n",temp);
-        free(year_ptr);
         free(temp);
 
         // Put the data into the logfile
@@ -223,11 +225,15 @@ int list_data(char **sorted_data, int size)
 
 void read_logs()
 {
+    clear_screen();
     FILE *fileptr;
     char lines[150];
     fileptr = fopen("temp_log.txt", "r");
+    if (fileptr == NULL)
+        printf("Something went wrong! Could not open file!");
     while(!feof(fileptr)) {
         fgets(lines, 150, fileptr);
         printf("%s\n", lines);
     }
+    fclose(fileptr);
 }
