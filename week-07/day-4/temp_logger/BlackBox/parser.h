@@ -9,9 +9,10 @@ int get_port_name();
 int open_port();
 int close_port();
 int log_data();
-int list_data();
+int list_data(char**, int);
 void all_data(char*,char**);
-void write_logs(char*);
+void write_logs(char**);
+void read_logs();
 
 
 /*char *temp_lines;

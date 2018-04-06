@@ -36,11 +36,12 @@
 
 1522945400 c:\users\user\documents\greenfox\gervarg\week-07\day-4\temp_logger\blackbox\parser.h
 
-1522944376 source:c:\users\user\documents\greenfox\gervarg\week-07\day-4\temp_logger\blackbox\parser.c
+1523011304 source:c:\users\user\documents\greenfox\gervarg\week-07\day-4\temp_logger\blackbox\parser.c
 	<stdio.h>
 	<time.h>
 	"rs232/rs232.h"
 	"parser.h"
 	"printer.h"
 	"string.h"
+	<Windows.h>
 
