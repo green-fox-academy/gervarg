@@ -51,10 +51,14 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
+GPIO_InitTypeDef  gpio_init_structure;
+GPIO_InitTypeDef gpio_init_structF;
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
+static void Led_choose_on(int);
+static void Led_choose_off(int);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -90,18 +94,42 @@ int main(void)
 
   //TODO:
   //Initialization the push button and the led with using BSP
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOF_CLK_ENABLE();
   BSP_LED_Init(LED_GREEN);
   BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
+  gpio_init_structure.Pin = GPIO_PIN_0;
+  gpio_init_structure.Mode = GPIO_MODE_OUTPUT_PP;
+  gpio_init_structure.Pull = GPIO_PULLDOWN;
+  gpio_init_structure.Speed = GPIO_SPEED_HIGH;
+
+  gpio_init_structF.Pin = GPIO_PIN_10 | GPIO_PIN_9 | GPIO_PIN_8;
+  gpio_init_structF.Mode = GPIO_MODE_OUTPUT_PP;
+  gpio_init_structF.Pull = GPIO_PULLDOWN;
+  gpio_init_structF.Speed = GPIO_SPEED_HIGH;
+  HAL_GPIO_Init(GPIOA, &gpio_init_structure);
+  HAL_GPIO_Init(GPIOF, &gpio_init_structF);
+  int i;
+
   //Turn the led on to validate the initialization is occured.
   
   /* Add your application code here     */
   /* Infinite loop */
   while (1)
   {
-	  if(BSP_PB_GetState(BUTTON_KEY) == 2) {
-		  BSP_LED_Toggle(LED_GREEN);
-		  HAL_Delay(500);
-
+	  if(BSP_PB_GetState(BUTTON_KEY)) {
+		  for(i = 11; i > 7; i--) {
+		       Led_choose_on(i);
+		       HAL_Delay(20);
+		       Led_choose_off(i);
+		       HAL_Delay(20);
+		     }
+		  for(i = 8; i < 12; i++) {
+			  Led_choose_on(i);
+			  HAL_Delay(20);
+			  Led_choose_off(i);
+			  HAL_Delay(20);
+		  	 }
 	  }
 
 	  //TODO:
@@ -129,6 +157,31 @@ int main(void)
   * @param  None
   * @retval None
   */
+
+static void Led_choose_on(int number)
+{
+ switch(number) {
+
+ case 11: GPIOA->ODR = GPIOA->ODR | 1; break;
+ case 10: GPIOF->ODR = GPIOF->ODR | (1<<number); break;
+ case 9: GPIOF->ODR = GPIOF->ODR | (1<<number); break;
+ case 8: GPIOF->ODR = GPIOF->ODR | (1<<number); break;
+ default: break;
+ }
+}
+
+static void Led_choose_off(int number)
+{
+ switch(number) {
+
+   case 11: GPIOA->ODR = GPIOA->ODR & 0xFFFFFFFE; break;
+   case 10: GPIOF->ODR = GPIOF->ODR & ~(1<<number); break;
+   case 9: GPIOF->ODR = GPIOF->ODR & ~(1<<number); break;
+   case 8: GPIOF->ODR = GPIOF->ODR & ~(1<<number); break;
+   default: break;
+   }
+}
+
 static void SystemClock_Config(void)
 {
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
