@@ -119,7 +119,7 @@ int log_data()
 
         char *temp = (char*) malloc(sizeof(buff));
         strcpy(temp, buff);
-        char *ptr_filter = strtok(buff, ".");
+        char *ptr_filter = strtok(buff, ".: ");
 
         int month;
         int day;
@@ -133,35 +133,30 @@ int log_data()
                 char *month_ptr = (char*)malloc(sizeof(10));
                 month_ptr = ptr_filter;
                 month = atoi(month_ptr);
-                //month = strtol(month_ptr, NULL, 10);
                 free(month_ptr);
             }
             else if (i == 1){
                 char *day_ptr = (char*)malloc(sizeof(10));
                 day_ptr = ptr_filter;
                 day = atoi(day_ptr);
-                //day = strtol(day_ptr, NULL, 10);
                 free(day_ptr);
             }
             else if (i == 2){
                 char *hour_ptr = (char*)malloc(sizeof(10));
                 hour_ptr = ptr_filter;
                 hour = atoi(hour_ptr);
-                //hour = strtol(hour_ptr, NULL, 10);
                 free(hour_ptr);
             }
             else if (i == 3){
                 char *minute_ptr = (char*)malloc(sizeof(10));
                 minute_ptr = ptr_filter;
                 minute = atoi(minute_ptr);
-                //minute = strtol(minute_ptr, NULL, 10);
                 free(minute_ptr);
             }
             else if (i == 4) {
                 char *second_ptr = (char*)malloc(sizeof(10));
                 second_ptr = ptr_filter;
                 second = atoi(second_ptr);
-                //second = strtol(second_ptr, NULL, 10);
                 free(second_ptr);
             }
             else {
@@ -171,20 +166,22 @@ int log_data()
                 free(temp_ptr);
             }
         }
-        if (month > 0 && month < 13 && day > 0 && day < 32 && hour >= 0 && hour < 25 && minute >= 0 && minute < 60 && second >= 0 && second < 60 && temperature_length < 4){
+        if (month > 0 && month < 13 && day > 0 && day < 32 &&
+            hour >= 0 && hour < 25 && minute >= 0 && minute < 60
+            && second >= 0 && second < 60 && temperature_length < 4){
+
             printf("%s\n",temp);
             data = (char**)realloc(data, (counter+1)*sizeof(*data));
             data[counter] = (char*)malloc(sizeof(temp));
             strcpy(data[counter], temp);
             counter++;
         }
-            //printf("%s\n",temp);
+
         free(temp);
 
         // Put the data into the logfile
         //Printing the buffer
-        /*char *ptr;
-        ptr = strtok(buff, "."); */
+
 
 
 	}
