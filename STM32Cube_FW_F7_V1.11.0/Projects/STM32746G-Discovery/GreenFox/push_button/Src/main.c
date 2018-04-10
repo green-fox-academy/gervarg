@@ -53,6 +53,7 @@
 /* Private function prototypes -----------------------------------------------*/
 GPIO_InitTypeDef  gpio_init_structure;
 GPIO_InitTypeDef gpio_init_structF;
+int global_var = 0;
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
@@ -109,7 +110,8 @@ int main(void)
   gpio_init_structF.Speed = GPIO_SPEED_HIGH;
   HAL_GPIO_Init(GPIOA, &gpio_init_structure);
   HAL_GPIO_Init(GPIOF, &gpio_init_structF);
-  int i;
+  int i = 1;
+  int count = 0;
 
   //Turn the led on to validate the initialization is occured.
   
@@ -117,8 +119,36 @@ int main(void)
   /* Infinite loop */
   while (1)
   {
+
+	  global_var++;
+
 	  if(BSP_PB_GetState(BUTTON_KEY)) {
-		  for(i = 11; i > 7; i--) {
+		  HAL_Delay(200);
+		  count++;
+		  if ((count % 2) > 0) { Led_choose_on(8); } else { Led_choose_off(8); }
+		  if ((count % 4) > 1) { Led_choose_on(9); } else { Led_choose_off(9); }
+		  if ((count % 8) > 3) { Led_choose_on(10); } else { Led_choose_off(10);}
+		  if ((count % 16) > 7) { Led_choose_on(11); } else { Led_choose_off(11); }
+		  HAL_Delay(200);
+		  /*for (i = 0; i < 500; i++) {
+			  HAL_Delay(1);
+			  if (!BSP_PB_GetState(BUTTON_KEY)) {
+				  BSP_LED_Off(LED_GREEN);
+				  break;
+			  }
+		  }
+		  BSP_LED_Off(LED_GREEN);
+		  for (i = 0; i < 500; i++) {
+			  HAL_Delay(1);
+			  if (BSP_PB_GetState(BUTTON_KEY)) {
+		  				  BSP_LED_On(LED_GREEN);
+		  				  break;
+		  			  }
+		  		  }
+
+		  Led_choose_on(i);
+		  i++;*/
+		  /*for(i = 11; i > 7; i--) {
 		       Led_choose_on(i);
 		       HAL_Delay(20);
 		       Led_choose_off(i);
@@ -129,7 +159,7 @@ int main(void)
 			  HAL_Delay(20);
 			  Led_choose_off(i);
 			  HAL_Delay(20);
-		  	 }
+		  	 }*/
 	  }
 
 	  //TODO:
