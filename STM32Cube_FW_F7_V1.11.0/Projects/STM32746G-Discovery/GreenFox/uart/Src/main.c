@@ -157,16 +157,20 @@ int main(void) {
 		HAL_UART_Receive(&uart_handle, receiver, 20, 2000);
 		//HAL_UART_Receive(&uart_handle, &receiver[i], 20, 2000);
 		//HAL_Delay(500);
-		if (!strcmp(receiver, "ON") || !strcmp(receiver, "ON ")) {
-			flag = 1;
-		} else if (!strcmp(receiver, "OFF")) {
-			flag = 0;
-		}
-		if (flag == 1) {
+		if (!strcmp(receiver, "ON ")) {
 			BSP_LED_On(LED_GREEN);
-		} else if (flag == 0) {
+		} else if (!strcmp(receiver, "OFF")) {
 			BSP_LED_Off(LED_GREEN);
+		} else if (strcmp(receiver,"   ") && strcmp(receiver, "OFF") &&
+				 strcmp(receiver, "ON ")) {
+			for (int i = 0; i < 3; i++) {
+				HAL_Delay(200);
+				BSP_LED_On(LED_GREEN);
+				HAL_Delay(200);
+				BSP_LED_Off(LED_GREEN);
+			}
 		}
+		HAL_Delay(500);
 		printf("%s\n", receiver);
 	}
 }
