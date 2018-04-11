@@ -52,6 +52,8 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef uart_handle;
+GPIO_InitTypeDef GPIOTxConfig;
+GPIO_InitTypeDef GPIORxConfig;
 
 volatile uint32_t timIntPeriod;
 
@@ -89,6 +91,10 @@ int main(void) {
 
 	/* Enable the CPU Cache */
 	CPU_CACHE_Enable();
+	HAL_Init();
+	/* Configure the System clock to have a frequency of 216 MHz */
+	SystemClock_Config();
+
 
 	/* STM32F7xx HAL library initialization:
 	 - Configure the Flash ART accelerator on ITCM interface
@@ -96,10 +102,36 @@ int main(void) {
 	 - Set NVIC Group Priority to 4
 	 - Low Level Initialization
 	 */
-	HAL_Init();
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_GPIOB_CLK_ENABLE();
 
-	/* Configure the System clock to have a frequency of 216 MHz */
-	SystemClock_Config();
+	GPIOTxConfig.Mode           = GPIO_MODE_AF_PP;
+	GPIOTxConfig.Alternate      = GPIO_AF7_USART1;
+	GPIOTxConfig.Pin			= GPIO_PIN_9;
+	GPIOTxConfig.Speed			= GPIO_SPEED_FAST;
+
+	GPIORxConfig.Mode           = GPIO_MODE_AF_PP;
+	GPIORxConfig.Alternate      = GPIO_AF7_USART1;
+	GPIORxConfig.Pin			= GPIO_PIN_7;
+	GPIORxConfig.Speed			= GPIO_SPEED_FAST;
+
+	HAL_GPIO_Init(GPIOA, &GPIOTxConfig);
+	HAL_GPIO_Init(GPIOB, &GPIORxConfig);
+
+
+	__HAL_RCC_USART1_CLK_ENABLE();
+
+	uart_handle.Instance = USART1;
+	uart_handle.Init.BaudRate = 115200;
+	uart_handle.Init.Mode = UART_MODE_TX_RX;
+	uart_handle.Init.StopBits = UART_STOPBITS_1;
+	uart_handle.Init.Parity = UART_PARITY_NONE;
+	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
+	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+
+
+
+
 
 	BSP_PB_Init(BUTTON_WAKEUP, BUTTON_MODE_EXTI);
 
@@ -110,9 +142,25 @@ int main(void) {
 	
 	//TODO:
 	//make the BSP_COM_Init() work in order to be able to use printf()
+	//BSP_COM_Init(COM1, &uart_handle);
+	HAL_UART_Init(&uart_handle);
+	HAL_Delay(500);
+	printf("Hello World\r\n");
+
+	char receiver[50];
+
 
 
 	while (1) {
+		strcpy(receiver, "");
+		HAL_UART_Receive(&uart_handle, receiver, 20, 2000);
+		if (!strcmp(receiver, "ON")) {
+			BSP_LED_On(LED_GREEN);
+			HAL_Delay(500);
+		} else {
+			BSP_LED_Off(LED_GREEN);
+		}
+		printf("%d\n\r", strlen(receiver));
 	}
 }
 
