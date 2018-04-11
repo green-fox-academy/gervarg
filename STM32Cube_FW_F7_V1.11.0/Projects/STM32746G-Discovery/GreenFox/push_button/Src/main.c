@@ -53,7 +53,6 @@
 /* Private function prototypes -----------------------------------------------*/
 GPIO_InitTypeDef  gpio_init_structure;
 GPIO_InitTypeDef gpio_init_structF;
-int global_var = 0;
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
@@ -130,36 +129,7 @@ int main(void)
 		  if ((count % 8) > 3) { Led_choose_on(10); } else { Led_choose_off(10);}
 		  if ((count % 16) > 7) { Led_choose_on(11); } else { Led_choose_off(11); }
 		  HAL_Delay(200);
-		  /*for (i = 0; i < 500; i++) {
-			  HAL_Delay(1);
-			  if (!BSP_PB_GetState(BUTTON_KEY)) {
-				  BSP_LED_Off(LED_GREEN);
-				  break;
-			  }
-		  }
-		  BSP_LED_Off(LED_GREEN);
-		  for (i = 0; i < 500; i++) {
-			  HAL_Delay(1);
-			  if (BSP_PB_GetState(BUTTON_KEY)) {
-		  				  BSP_LED_On(LED_GREEN);
-		  				  break;
-		  			  }
-		  		  }
 
-		  Led_choose_on(i);
-		  i++;*/
-		  /*for(i = 11; i > 7; i--) {
-		       Led_choose_on(i);
-		       HAL_Delay(20);
-		       Led_choose_off(i);
-		       HAL_Delay(20);
-		     }
-		  for(i = 8; i < 12; i++) {
-			  Led_choose_on(i);
-			  HAL_Delay(20);
-			  Led_choose_off(i);
-			  HAL_Delay(20);
-		  	 }*/
 	  }
 
 	  //TODO:
