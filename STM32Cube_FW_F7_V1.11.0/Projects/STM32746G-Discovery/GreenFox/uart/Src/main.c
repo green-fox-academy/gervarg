@@ -148,19 +148,26 @@ int main(void) {
 	printf("Hello World\r\n");
 
 	char receiver[50];
+	int flag = 0;
 
 
 
 	while (1) {
-		strcpy(receiver, "");
+		strcpy(receiver, "   ");
 		HAL_UART_Receive(&uart_handle, receiver, 20, 2000);
-		if (!strcmp(receiver, "ON")) {
+		//HAL_UART_Receive(&uart_handle, &receiver[i], 20, 2000);
+		//HAL_Delay(500);
+		if (!strcmp(receiver, "ON") || !strcmp(receiver, "ON ")) {
+			flag = 1;
+		} else if (!strcmp(receiver, "OFF")) {
+			flag = 0;
+		}
+		if (flag == 1) {
 			BSP_LED_On(LED_GREEN);
-			HAL_Delay(500);
-		} else {
+		} else if (flag == 0) {
 			BSP_LED_Off(LED_GREEN);
 		}
-		printf("%d\n\r", strlen(receiver));
+		printf("%s\n", receiver);
 	}
 }
 
