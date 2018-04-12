@@ -38,6 +38,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include <string.h>
+#include "stm32746g_discovery_ts.h"
+#include "stm32746g_discovery_lcd.h"
 
 /** @addtogroup STM32F7xx_HAL_Examples
  * @{
@@ -46,13 +48,14 @@
 /** @addtogroup Templates
  * @{
  */
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-/* RNG handler declaration */
-RNG_HandleTypeDef RngHandle;
 UART_HandleTypeDef uart_handle;
+
+volatile uint32_t timIntPeriod;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -68,8 +71,6 @@ static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
-static void Print_play_game(void);
-static int Average_time(int*, int);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -98,18 +99,19 @@ int main(void) {
 	 - Low Level Initialization
 	 */
 	HAL_Init();
-	__HAL_RCC_GPIOA_CLK_ENABLE()
-	;
+
 	/* Configure the System clock to have a frequency of 216 MHz */
 	SystemClock_Config();
-	RngHandle.Instance = RNG;
-	uint32_t random_number;
+
+	BSP_PB_Init(BUTTON_WAKEUP, BUTTON_MODE_EXTI);
 
 	/* Add your application code here
 	 */
 	BSP_LED_Init(LED_GREEN);
-	BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
 
+	
+	//TODO:
+	//make the BSP_COM_Init() work in order to be able to use printf()
 	uart_handle.Init.BaudRate = 115200;
 	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
 	uart_handle.Init.StopBits = UART_STOPBITS_1;
@@ -119,70 +121,41 @@ int main(void) {
 
 	BSP_COM_Init(COM1, &uart_handle);
 
-	/* Output a message using printf function */
-	printf("\n------------------WELCOME------------------\r\n");
-	printf("**********in MACROTIS reaction game**********\r\n\n");
 
-	if (HAL_RNG_Init(&RngHandle) != HAL_OK) {
-		/* Initialization Error */
-		Error_Handler();
-	}
+	printf("\n-----------------WELCOME-----------------\r\n");
+	printf("**********in STATIC interrupts WS**********\r\n\n");
 
 
+	BSP_LCD_Init();
+	// Initialize the LCD Layers
+	BSP_LCD_LayerDefaultInit(1, LCD_FB_START_ADDRESS);
+	BSP_LCD_SelectLayer(1);
+	BSP_LCD_SetFont(&LCD_DEFAULT_FONT);
 
-	uint32_t start, end;
-	uint32_t reaction_time = 0;
-	int reaction_array[5];
-	int counter = 0;
-	Print_play_game();
-	random_number = HAL_RNG_GetRandomNumber(&RngHandle) % 10000 + 1000;
+
+	BSP_LCD_SetBackColor(LCD_COLOR_BLUE);
+	BSP_LCD_Clear(LCD_COLOR_BLUE);
+	BSP_LCD_SetTextColor(LCD_COLOR_WHITE);
+
+	BSP_LCD_SetFont(&LCD_DEFAULT_FONT);
+	BSP_LCD_DisplayStringAt(12, 9, (uint8_t *) " Hello embedded!", LEFT_MODE);
+
+	BSP_TS_Init(BSP_LCD_GetXSize(), BSP_LCD_GetYSize());
+	TS_StateTypeDef ts_state;
 
 	while (1) {
-		int game = 0;
-		for (int i = 0; i < 1000; i++) {
-			if (i % 500 == 0) {
-				BSP_LED_Toggle(LED_GREEN);
-			}
-			HAL_Delay(1);
-			if (BSP_PB_GetState(BUTTON_KEY)) {
-				game = 1;
-				break;
-			}
-		}
-		if (game == 1) {
-			BSP_LED_Off(LED_GREEN);
-			start = HAL_GetTick();
-			end = start + random_number;
-			while ((HAL_GetTick() - start) < end) {
-				if (BSP_PB_GetState(BUTTON_KEY)) {
-					printf("You lose because your cheated!!!\n\n");
-					break;
-				}
-			}
-			//HAL_Delay(random_number);
+		BSP_TS_GetState(&ts_state);
+		if (ts_state.touchDetected) {
+			BSP_LED_On(LED_GREEN);
 
-			while (!BSP_PB_GetState(BUTTON_KEY)) {
-				BSP_LED_On(LED_GREEN);
-			}
-			if (BSP_PB_GetState(BUTTON_KEY)) {
-				reaction_time = HAL_GetTick() - end;
-				printf("Your reaction time is: %u ms\n\n", reaction_time);
-				reaction_array[counter] = reaction_time;
-				counter++;
-				if (counter == 5) {
-					printf("Your average time after 5 samples is: %d ms\n\n",
-							Average_time(reaction_array, counter));
-					counter = 0;
-				}
-				BSP_LED_Off(LED_GREEN);
-				HAL_Delay(1000);
-				Print_play_game();
-				random_number = HAL_RNG_GetRandomNumber(&RngHandle) % 10000 + 1000;
-			}
-		}
 
+			BSP_LCD_FillCircle((uint16_t)ts_state.touchX[0], (uint16_t)ts_state.touchY[0], 10);
+
+
+		}
 	}
 }
+
 /**
  * @brief  Retargets the C library printf function to the USART.
  * @param  None
@@ -216,23 +189,6 @@ PUTCHAR_PROTOTYPE {
  * @param  None
  * @retval None
  */
-
-static int Average_time(int *times, int counter)
-{
-	int sum = 0;
-	int average;
-	for (int i = 0; i < counter; i++) {
-		sum += times[i];
-	}
-	average = sum / counter;
-	return average;
-}
-
-
-static void Print_play_game(void) {
-	printf("Let's play a game! Are you ready?\n");
-}
-
 static void SystemClock_Config(void) {
 	RCC_ClkInitTypeDef RCC_ClkInitStruct;
 	RCC_OscInitTypeDef RCC_OscInitStruct;
