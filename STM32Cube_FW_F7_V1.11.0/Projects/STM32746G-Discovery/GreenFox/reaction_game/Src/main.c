@@ -98,8 +98,7 @@ int main(void) {
 	 - Low Level Initialization
 	 */
 	HAL_Init();
-	__HAL_RCC_GPIOA_CLK_ENABLE()
-	;
+	__HAL_RCC_GPIOA_CLK_ENABLE();
 	/* Configure the System clock to have a frequency of 216 MHz */
 	SystemClock_Config();
 	RngHandle.Instance = RNG;
@@ -149,19 +148,24 @@ int main(void) {
 				break;
 			}
 		}
+
+
+
 		if (game == 1) {
 			BSP_LED_Off(LED_GREEN);
 			start = HAL_GetTick();
 			end = start + random_number;
-			while ((HAL_GetTick() - start) < end) {
+			/*while (HAL_GetTick() < end) {
 				if (BSP_PB_GetState(BUTTON_KEY)) {
 					printf("You lose because your cheated!!!\n\n");
+					game = 0;
 					break;
 				}
-			}
-			//HAL_Delay(random_number);
+			}*/
 
-			while (!BSP_PB_GetState(BUTTON_KEY)) {
+			HAL_Delay(random_number);
+
+			while (!BSP_PB_GetState(BUTTON_KEY) && game == 1) {
 				BSP_LED_On(LED_GREEN);
 			}
 			if (BSP_PB_GetState(BUTTON_KEY)) {

@@ -48,14 +48,14 @@
 /** @addtogroup Templates
  * @{
  */
-
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+/* RNG handler declaration */
+RNG_HandleTypeDef RngHandle;
 UART_HandleTypeDef uart_handle;
-
-volatile uint32_t timIntPeriod;
+TS_StateTypeDef ts_state;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -66,11 +66,15 @@ volatile uint32_t timIntPeriod;
 #else
 #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
 #endif /* __GNUC__ */
+#define  CIRCLE_RADIUS        30
 
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
+static void Print_play_game(void);
+static int Average_time(int*, int);
+static void Touchscreen_DrawBackground (void);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -99,19 +103,17 @@ int main(void) {
 	 - Low Level Initialization
 	 */
 	HAL_Init();
-
+	__HAL_RCC_GPIOA_CLK_ENABLE();
 	/* Configure the System clock to have a frequency of 216 MHz */
 	SystemClock_Config();
-
-	BSP_PB_Init(BUTTON_WAKEUP, BUTTON_MODE_EXTI);
+	RngHandle.Instance = RNG;
+	uint32_t random_time;
 
 	/* Add your application code here
 	 */
 	BSP_LED_Init(LED_GREEN);
+	BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
 
-	
-	//TODO:
-	//make the BSP_COM_Init() work in order to be able to use printf()
 	uart_handle.Init.BaudRate = 115200;
 	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
 	uart_handle.Init.StopBits = UART_STOPBITS_1;
@@ -121,41 +123,88 @@ int main(void) {
 
 	BSP_COM_Init(COM1, &uart_handle);
 
+	/* Output a message using printf function */
+	printf("\n------------------WELCOME------------------\r\n");
+	printf("**********in MACROTIS reaction game**********\r\n\n");
 
-	printf("\n-----------------WELCOME-----------------\r\n");
-	printf("**********in STATIC interrupts WS**********\r\n\n");
-
-
+	if (HAL_RNG_Init(&RngHandle) != HAL_OK) {
+		/* Initialization Error */
+		Error_Handler();
+	}
 	BSP_LCD_Init();
 	// Initialize the LCD Layers
 	BSP_LCD_LayerDefaultInit(1, LCD_FB_START_ADDRESS);
 	BSP_LCD_SelectLayer(1);
 	BSP_LCD_SetFont(&LCD_DEFAULT_FONT);
 
+	int rng_circle_posX = (HAL_RNG_GetRandomNumber(&RngHandle) % 5 + 1) * BSP_LCD_GetXSize() / 5;
+	int rng_circle_posY = BSP_LCD_GetYSize() - 50 - CIRCLE_RADIUS;
 
-	BSP_LCD_SetBackColor(LCD_COLOR_BLUE);
-	BSP_LCD_Clear(LCD_COLOR_BLUE);
-	BSP_LCD_SetTextColor(LCD_COLOR_WHITE);
+	printf("xpos : %d\n", rng_circle_posX);
+	printf("ypos : %d\n", rng_circle_posY);
+	BSP_LCD_SetBackColor(LCD_COLOR_WHITE);
+	BSP_LCD_Clear(LCD_COLOR_WHITE);
 
+	BSP_LCD_SetTextColor(LCD_COLOR_BLUE);
+	BSP_LCD_FillRect(0, 0, BSP_LCD_GetXSize(), 50);
+
+	BSP_LCD_SetTextColor(LCD_COLOR_RED);
 	BSP_LCD_SetFont(&LCD_DEFAULT_FONT);
 	BSP_LCD_DisplayStringAt(12, 9, (uint8_t *) " Hello embedded!", LEFT_MODE);
 
+	BSP_LCD_SetTextColor(LCD_COLOR_RED);
+	BSP_LCD_FillCircle(rng_circle_posX, rng_circle_posY, CIRCLE_RADIUS);
+
 	BSP_TS_Init(BSP_LCD_GetXSize(), BSP_LCD_GetYSize());
-	TS_StateTypeDef ts_state;
+
+
+	uint8_t  text[30];
+	uint32_t start, end;
+	uint32_t reaction_time = 0;
+	int reaction_array[5];
+	int counter = 0;
+	int x, y;
+	random_time = HAL_RNG_GetRandomNumber(&RngHandle) % 10000 + 1000;
+	printf("%d\n", random_time);
 
 	while (1) {
 		BSP_TS_GetState(&ts_state);
+		start = HAL_GetTick();
+		end = start + random_time;
 		if (ts_state.touchDetected) {
-			BSP_LED_On(LED_GREEN);
+					x = ts_state.touchX[0];
+					y = ts_state.touchY[0];
+					sprintf((char*)text, "1[%d,%d]    ", x, y);
+					BSP_LCD_DisplayStringAt(15, BSP_LCD_GetYSize() - 25,
+					                                (uint8_t *)&text,
+					                                LEFT_MODE);
 
-
-			BSP_LCD_FillCircle((uint16_t)ts_state.touchX[0], (uint16_t)ts_state.touchY[0], 10);
-
+					if (x < rng_circle_posX +30 && x > rng_circle_posX - 30 &&
+							y < rng_circle_posY +30 && y > rng_circle_posY - 30){
+								Touchscreen_DrawBackground();
+								HAL_Delay(100);
+								rng_circle_posX = (HAL_RNG_GetRandomNumber(&RngHandle) % 5 + 1) * BSP_LCD_GetXSize() / 5;
+								BSP_LCD_SetTextColor(LCD_COLOR_RED);
+								BSP_LCD_FillCircle(rng_circle_posX, rng_circle_posY, CIRCLE_RADIUS);
+							}
 
 		}
+
 	}
 }
 
+
+static void Touchscreen_DrawBackground (void)
+{
+	BSP_LCD_SetBackColor(LCD_COLOR_WHITE);
+	BSP_LCD_Clear(LCD_COLOR_WHITE);
+
+	BSP_LCD_SetTextColor(LCD_COLOR_BLUE);
+	BSP_LCD_FillRect(0, 0, BSP_LCD_GetXSize(), 50);
+	BSP_LCD_SetTextColor(LCD_COLOR_RED);
+	BSP_LCD_SetFont(&LCD_DEFAULT_FONT);
+	BSP_LCD_DisplayStringAt(12, 9, (uint8_t *) " Hello embedded!", LEFT_MODE);
+}
 /**
  * @brief  Retargets the C library printf function to the USART.
  * @param  None
@@ -189,6 +238,23 @@ PUTCHAR_PROTOTYPE {
  * @param  None
  * @retval None
  */
+
+static int Average_time(int *times, int counter)
+{
+	int sum = 0;
+	int average;
+	for (int i = 0; i < counter; i++) {
+		sum += times[i];
+	}
+	average = sum / counter;
+	return average;
+}
+
+
+static void Print_play_game(void) {
+	printf("Let's play a game! Are you ready?\n");
+}
+
 static void SystemClock_Config(void) {
 	RCC_ClkInitTypeDef RCC_ClkInitStruct;
 	RCC_OscInitTypeDef RCC_OscInitStruct;
