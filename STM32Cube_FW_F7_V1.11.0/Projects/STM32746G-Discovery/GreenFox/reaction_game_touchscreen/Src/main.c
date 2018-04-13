@@ -73,6 +73,7 @@ static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
+
 static void Print_play_game(void);
 static int Average_time(int*, int);
 static void game_start(void);
@@ -82,6 +83,8 @@ static void game_area(void);
 static int generate_random_x(void);
 static int generate_random_y(void);
 static void result(int);
+static int check_circle_area(int, int, int, int);
+//static void print_reaction_time(char*, int);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -180,7 +183,6 @@ int main(void) {
 		if (ts_state.touchDetected && game == 0) {
 			game = 1;
 		}
-
 		if (game == 1) {
 			start = HAL_GetTick();
 			end = start + random_time;
@@ -200,14 +202,8 @@ int main(void) {
 		if (ts_state.touchDetected && game == 2) {
 			x = ts_state.touchX[0];
 			y = ts_state.touchY[0];
-			/*sprintf((char*) text, "Coord[%d,%d]    ", x, y);
-			 BSP_LCD_DisplayStringAt(15, BSP_LCD_GetYSize() - 25,
-			 (uint8_t *) &text, LEFT_MODE);*/
 
-			if (x < rng_circle_posX + CIRCLE_RADIUS	//checking circle touch area
-			&& x > rng_circle_posX - CIRCLE_RADIUS
-					&& y < rng_circle_posY + CIRCLE_RADIUS
-					&& y > rng_circle_posY - CIRCLE_RADIUS) {
+			if (check_circle_area(x, y, rng_circle_posX, rng_circle_posY)) { //checking circle touch area
 				reaction_time = HAL_GetTick() - end;
 				reaction_array[counter] = reaction_time;
 				counter++;
@@ -216,6 +212,7 @@ int main(void) {
 				BSP_LCD_DisplayStringAt(15, BSP_LCD_GetYSize() - 25,
 						(uint8_t *) &text, LEFT_MODE);
 				overdraw_white_circle(rng_circle_posX, rng_circle_posY);
+
 				if (counter == 5) {
 					game_area();
 					sprintf((char*) text_result, "Your average time: %d ms",
@@ -238,6 +235,14 @@ int main(void) {
 	}
 }
 
+static int check_circle_area(int x, int y, int circleX, int circleY) {
+	if (x < circleX + CIRCLE_RADIUS && x > circleX - CIRCLE_RADIUS
+			&& y < circleY + CIRCLE_RADIUS && y > circleY - CIRCLE_RADIUS)
+		return 1;
+	else
+		return 0;
+}
+
 static void result(int average) {
 	if (average < 500) {
 		BSP_LCD_SetTextColor(LCD_COLOR_RED);
@@ -256,6 +261,12 @@ static void result(int average) {
 				(uint8_t *) "Maybe next time, Slow Poke", CENTER_MODE);
 	}
 }
+
+/*static void print_reaction_time(char* text, int reaction) {
+	sprintf((char*) text, "Your reaction time: %d ms", reaction);
+	BSP_LCD_DisplayStringAt(15, BSP_LCD_GetYSize() - 25, (uint8_t *) &text,
+			LEFT_MODE);
+}*/
 
 static int generate_random_x(void) {
 	return HAL_RNG_GetRandomNumber(&RngHandle) % 420 + 30;
