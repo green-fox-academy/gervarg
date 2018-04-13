@@ -40,6 +40,7 @@
 #include <string.h>
 #include "stm32746g_discovery_ts.h"
 #include "stm32746g_discovery_lcd.h"
+#include "fonts.h"
 
 /** @addtogroup STM32F7xx_HAL_Examples
  * @{
@@ -74,7 +75,13 @@ static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
 static void Print_play_game(void);
 static int Average_time(int*, int);
-static void Touchscreen_DrawBackground (void);
+static void game_start(void);
+static void overdraw_white_circle(int, int);
+static void draw_red_circle(int, int);
+static void game_area(void);
+static int generate_random_x(void);
+static int generate_random_y(void);
+static void result(int);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -103,7 +110,8 @@ int main(void) {
 	 - Low Level Initialization
 	 */
 	HAL_Init();
-	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_GPIOA_CLK_ENABLE()
+	;
 	/* Configure the System clock to have a frequency of 216 MHz */
 	SystemClock_Config();
 	RngHandle.Instance = RNG;
@@ -137,9 +145,8 @@ int main(void) {
 	BSP_LCD_SelectLayer(1);
 	BSP_LCD_SetFont(&LCD_DEFAULT_FONT);
 
-	int rng_circle_posX = (HAL_RNG_GetRandomNumber(&RngHandle) % 5 + 1) * BSP_LCD_GetXSize() / 5;
-	int rng_circle_posY = BSP_LCD_GetYSize() - 50 - CIRCLE_RADIUS;
-
+	int rng_circle_posX;
+	int rng_circle_posY;
 	printf("xpos : %d\n", rng_circle_posX);
 	printf("ypos : %d\n", rng_circle_posY);
 	BSP_LCD_SetBackColor(LCD_COLOR_WHITE);
@@ -148,62 +155,152 @@ int main(void) {
 	BSP_LCD_SetTextColor(LCD_COLOR_BLUE);
 	BSP_LCD_FillRect(0, 0, BSP_LCD_GetXSize(), 50);
 
-	BSP_LCD_SetTextColor(LCD_COLOR_RED);
-	BSP_LCD_SetFont(&LCD_DEFAULT_FONT);
-	BSP_LCD_DisplayStringAt(12, 9, (uint8_t *) " Hello embedded!", LEFT_MODE);
-
-	BSP_LCD_SetTextColor(LCD_COLOR_RED);
-	BSP_LCD_FillCircle(rng_circle_posX, rng_circle_posY, CIRCLE_RADIUS);
-
 	BSP_TS_Init(BSP_LCD_GetXSize(), BSP_LCD_GetYSize());
 
-
-	uint8_t  text[30];
+	uint8_t text[30];
+	uint8_t text_result[30];
 	uint32_t start, end;
 	uint32_t reaction_time = 0;
 	int reaction_array[5];
 	int counter = 0;
 	int x, y;
+	int game = 0;
 	random_time = HAL_RNG_GetRandomNumber(&RngHandle) % 10000 + 1000;
 	printf("%d\n", random_time);
+	game_start();
+
+	while (!ts_state.touchDetected) {
+		BSP_TS_GetState(&ts_state);
+	}
+	game_area();
 
 	while (1) {
 		BSP_TS_GetState(&ts_state);
-		start = HAL_GetTick();
-		end = start + random_time;
-		if (ts_state.touchDetected) {
-					x = ts_state.touchX[0];
-					y = ts_state.touchY[0];
-					sprintf((char*)text, "1[%d,%d]    ", x, y);
-					BSP_LCD_DisplayStringAt(15, BSP_LCD_GetYSize() - 25,
-					                                (uint8_t *)&text,
-					                                LEFT_MODE);
 
-					if (x < rng_circle_posX +30 && x > rng_circle_posX - 30 &&
-							y < rng_circle_posY +30 && y > rng_circle_posY - 30){
-								Touchscreen_DrawBackground();
-								HAL_Delay(100);
-								rng_circle_posX = (HAL_RNG_GetRandomNumber(&RngHandle) % 5 + 1) * BSP_LCD_GetXSize() / 5;
-								BSP_LCD_SetTextColor(LCD_COLOR_RED);
-								BSP_LCD_FillCircle(rng_circle_posX, rng_circle_posY, CIRCLE_RADIUS);
-							}
+		if (ts_state.touchDetected && game == 0) {
+			game = 1;
+		}
+
+		if (game == 1) {
+			start = HAL_GetTick();
+			end = start + random_time;
+			HAL_Delay(random_time);
+			sprintf((char*) text, "                                    ",
+					reaction_time);
+			BSP_LCD_DisplayStringAt(15, BSP_LCD_GetYSize() - 25,
+					(uint8_t *) &text, LEFT_MODE);
+			rng_circle_posX = generate_random_x();
+			rng_circle_posY = generate_random_y();
+			draw_red_circle(rng_circle_posX, rng_circle_posY);
+			game = 2;
+			printf("end time: %d\n\n", end);
+			printf("reaction time: %d\n\n", reaction_time);
+		}
+
+		if (ts_state.touchDetected && game == 2) {
+			x = ts_state.touchX[0];
+			y = ts_state.touchY[0];
+			/*sprintf((char*) text, "Coord[%d,%d]    ", x, y);
+			 BSP_LCD_DisplayStringAt(15, BSP_LCD_GetYSize() - 25,
+			 (uint8_t *) &text, LEFT_MODE);*/
+
+			if (x < rng_circle_posX + CIRCLE_RADIUS	//checking circle touch area
+			&& x > rng_circle_posX - CIRCLE_RADIUS
+					&& y < rng_circle_posY + CIRCLE_RADIUS
+					&& y > rng_circle_posY - CIRCLE_RADIUS) {
+				reaction_time = HAL_GetTick() - end;
+				reaction_array[counter] = reaction_time;
+				counter++;
+				sprintf((char*) text, "Your reaction time: %d ms",
+						reaction_time);
+				BSP_LCD_DisplayStringAt(15, BSP_LCD_GetYSize() - 25,
+						(uint8_t *) &text, LEFT_MODE);
+				overdraw_white_circle(rng_circle_posX, rng_circle_posY);
+				if (counter == 5) {
+					game_area();
+					sprintf((char*) text_result, "Your average time: %d ms",
+							Average_time(reaction_array, counter));
+					BSP_LCD_DisplayStringAt(0, BSP_LCD_GetYSize() / 2,
+							(uint8_t *) &text_result, CENTER_MODE);
+					result(Average_time(reaction_array, counter));
+					HAL_Delay(5000);
+					//game_start();
+					counter = 0;
+					game_area();
+				}
+				random_time = HAL_RNG_GetRandomNumber(&RngHandle) % 10000
+						+ 1000;
+				game = 0;
+			}
 
 		}
 
 	}
 }
 
+static void result(int average) {
+	if (average < 500) {
+		BSP_LCD_SetTextColor(LCD_COLOR_RED);
+		BSP_LCD_SetFont(&Font20);
+		BSP_LCD_DisplayStringAt(0, BSP_LCD_GetYSize() / 2 + 17,
+				(uint8_t *) "You are FLASH", CENTER_MODE);
+	} else if (average >= 500 && average < 800) {
+		BSP_LCD_SetTextColor(LCD_COLOR_RED);
+		BSP_LCD_SetFont(&Font20);
+		BSP_LCD_DisplayStringAt(0, BSP_LCD_GetYSize() / 2 + 17,
+				(uint8_t *) "Not bad, but you can do better", CENTER_MODE);
+	} else {
+		BSP_LCD_SetTextColor(LCD_COLOR_RED);
+		BSP_LCD_SetFont(&Font20);
+		BSP_LCD_DisplayStringAt(0, BSP_LCD_GetYSize() / 2 + 17,
+				(uint8_t *) "Maybe next time, Slow Poke", CENTER_MODE);
+	}
+}
 
-static void Touchscreen_DrawBackground (void)
-{
+static int generate_random_x(void) {
+	return HAL_RNG_GetRandomNumber(&RngHandle) % 420 + 30;
+}
+
+static int generate_random_y(void) {
+	return HAL_RNG_GetRandomNumber(&RngHandle) % 152 + 40;
+}
+
+static void overdraw_white_circle(int x, int y) {
+	BSP_LCD_SetTextColor(LCD_COLOR_WHITE);
+	BSP_LCD_FillCircle(x, y, CIRCLE_RADIUS);
+}
+
+static void draw_red_circle(int x, int y) {
+	BSP_LCD_SetTextColor(LCD_COLOR_DARKGREEN);
+	BSP_LCD_FillCircle(x, y, CIRCLE_RADIUS);
+}
+
+static void game_start(void) {
 	BSP_LCD_SetBackColor(LCD_COLOR_WHITE);
 	BSP_LCD_Clear(LCD_COLOR_WHITE);
 
 	BSP_LCD_SetTextColor(LCD_COLOR_BLUE);
 	BSP_LCD_FillRect(0, 0, BSP_LCD_GetXSize(), 50);
 	BSP_LCD_SetTextColor(LCD_COLOR_RED);
-	BSP_LCD_SetFont(&LCD_DEFAULT_FONT);
-	BSP_LCD_DisplayStringAt(12, 9, (uint8_t *) " Hello embedded!", LEFT_MODE);
+	BSP_LCD_SetFont(&Font20);
+	BSP_LCD_DisplayStringAt(0, 10,
+			(uint8_t *) "Welcome to Macrotis reaction game", CENTER_MODE);
+	BSP_LCD_SetTextColor(LCD_COLOR_RED);
+	BSP_LCD_SetFont(&Font16);
+	BSP_LCD_DisplayStringAt(0, BSP_LCD_GetYSize() / 2,
+			(uint8_t *) " Touch the screen to begin the game", CENTER_MODE);
+	BSP_LCD_SetTextColor(LCD_COLOR_RED);
+	BSP_LCD_SetFont(&Font16);
+	BSP_LCD_DisplayStringAt(0, BSP_LCD_GetYSize() - BSP_LCD_GetYSize() / 4,
+			(uint8_t *) "You have to touch the green circles", CENTER_MODE);
+	BSP_LCD_DisplayStringAt(0, BSP_LCD_GetYSize() - BSP_LCD_GetYSize() / 4 + 17,
+			(uint8_t *) "that appear on the screen", CENTER_MODE);
+}
+
+static void game_area(void) {
+	BSP_LCD_SetBackColor(LCD_COLOR_WHITE);
+	BSP_LCD_Clear(LCD_COLOR_WHITE);
+	BSP_LCD_SetTextColor(LCD_COLOR_RED);
 }
 /**
  * @brief  Retargets the C library printf function to the USART.
@@ -239,8 +336,7 @@ PUTCHAR_PROTOTYPE {
  * @retval None
  */
 
-static int Average_time(int *times, int counter)
-{
+static int Average_time(int *times, int counter) {
 	int sum = 0;
 	int average;
 	for (int i = 0; i < counter; i++) {
@@ -249,7 +345,6 @@ static int Average_time(int *times, int counter)
 	average = sum / counter;
 	return average;
 }
-
 
 static void Print_play_game(void) {
 	printf("Let's play a game! Are you ready?\n");
