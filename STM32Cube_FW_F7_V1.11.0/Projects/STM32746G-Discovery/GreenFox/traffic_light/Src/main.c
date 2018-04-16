@@ -52,13 +52,10 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef uart_handle;
-//GPIO_InitTypeDef gpio_init_structure;
-TIM_HandleTypeDef TimHandle;
-//TIM_HandleTypeDef TimHandle2;
-//TIM_HandleTypeDef TimHandle3;
-GPIO_InitTypeDef ledConfig;
-TIM_OC_InitTypeDef sConfig;
-
+GPIO_InitTypeDef gpio_init_structure;
+TIM_HandleTypeDef    TimHandle;
+TIM_HandleTypeDef    TimHandle2;
+TIM_HandleTypeDef    TimHandle3;
 /* Private function prototypes -----------------------------------------------*/
 
 #ifdef __GNUC__
@@ -102,47 +99,49 @@ int main(void) {
 	 */
 	HAL_Init();
 
+
 	/* Configure the System clock to have a frequency of 216 MHz */
 	SystemClock_Config();
-	__HAL_RCC_GPIOA_CLK_ENABLE()
-	;
-	__HAL_RCC_TIM2_CLK_ENABLE()
-	;  	 // we need to enable the TIM2
-	__HAL_RCC_GPIOF_CLK_ENABLE()
-	;
-	__HAL_RCC_TIM3_CLK_ENABLE()
-	;
-	__HAL_RCC_TIM4_CLK_ENABLE()
-	;
-
-	TimHandle.Instance = TIM2;
-	TimHandle.Init.Period = 100;
-	TimHandle.Init.Prescaler = 1;
-	TimHandle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
-
-	HAL_TIM_Base_Init(&TimHandle);            //Configure the timer
-	HAL_TIM_Base_Start(&TimHandle);
-
-	ledConfig.Pin = GPIO_PIN_15;
-	ledConfig.Mode = GPIO_MODE_AF_PP;
-	ledConfig.Pull = GPIO_NOPULL;
-	ledConfig.Speed = GPIO_SPEED_HIGH;
-	ledConfig.Alternate = GPIO_AF1_TIM2; // and the alternate function is to use TIM2 timer's first channel
-	HAL_GPIO_Init(GPIOA, &ledConfig);
-
-	HAL_TIM_PWM_Init(&TimHandle);
-
-	sConfig.Pulse = 50;
-	sConfig.OCMode = TIM_OCMODE_PWM1;
-	sConfig.OCPolarity = TIM_OCPOLARITY_HIGH;
-	sConfig.OCFastMode = TIM_OCFAST_ENABLE;
-
-	HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
-
-	HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_TIM2_CLK_ENABLE();  	 // we need to enable the TIM2
+	__HAL_RCC_GPIOF_CLK_ENABLE();
+	__HAL_RCC_TIM3_CLK_ENABLE();
+	__HAL_RCC_TIM4_CLK_ENABLE();
 
 
+	TimHandle.Instance               = TIM2;
+	TimHandle.Init.Period            = 1000;
+	TimHandle.Init.Prescaler         = 27000;
+	TimHandle.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+	TimHandle.Init.CounterMode       = TIM_COUNTERMODE_UP;
+
+
+	gpio_init_structure.Pin = GPIO_PIN_0;
+	gpio_init_structure.Mode = GPIO_MODE_OUTPUT_PP;
+	gpio_init_structure.Pull = GPIO_NOPULL;
+	gpio_init_structure.Speed = GPIO_SPEED_HIGH;
+	HAL_GPIO_Init(GPIOA, &gpio_init_structure);
+	gpio_init_structure.Pin = GPIO_PIN_10 | GPIO_PIN_9;
+	HAL_GPIO_Init(GPIOF, &gpio_init_structure);
+	TimHandle2.Instance 				= TIM3;
+	TimHandle2.Init.Period            = 1000;
+	TimHandle2.Init.Prescaler         = 27000;
+	TimHandle2.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+	TimHandle2.Init.CounterMode       = TIM_COUNTERMODE_UP;
+	HAL_TIM_Base_Init(&TimHandle2);
+	TimHandle3.Instance 				= TIM4;
+	TimHandle3.Init.Period            = 2000;
+	TimHandle3.Init.Prescaler         = 27000;
+	TimHandle3.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+	TimHandle3.Init.CounterMode       = TIM_COUNTERMODE_UP;
+	HAL_TIM_Base_Init(&TimHandle3);
+	HAL_TIM_Base_Start(&TimHandle3);
+
+
+
+
+	/* Add your application code here
+	 */
 	BSP_LED_Init(LED_GREEN);
 
 	uart_handle.Init.BaudRate = 115200;
@@ -161,16 +160,27 @@ int main(void) {
 	printf("\n-----------------WELCOME-----------------\r\n");
 	printf("**********in  timer & pwm WS**********\r\n\n");
 
+
+
 	while (1) {
 
-//		printf("%d\n", TIM2->CNT);
-		for (int i = 0; i < 50; i++) {
-			TIM2->CCR1 = i;
-			HAL_Delay(50);
-		}
-		for (int i = 50; i >= 0; i--) {
-			TIM2->CCR1 = i;
-			HAL_Delay(50);
+		HAL_TIM_Base_Start(&TimHandle);
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
+		if (TIM2->CNT == 2000) {
+			HAL_TIM_Base_Stop(&TimHandle);
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOF, GPIO_PIN_10, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_RESET);
+		} else if (TIM2->CNT == 1000) {
+			HAL_TIM_Base_Start(&TimHandle2);
+			HAL_GPIO_WritePin(GPIOF, GPIO_PIN_10, GPIO_PIN_SET);
+			//__HAL_TIM_SET_COUNTER(&TimHandle2, 0);
+			//HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_10);
+		} else if (TIM2->CNT == 0) {
+			HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOF, GPIO_PIN_10, GPIO_PIN_RESET);
+			//__HAL_TIM_SET_COUNTER(&TimHandle3, 0);
+			//HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9);
 		}
 	}
 }
