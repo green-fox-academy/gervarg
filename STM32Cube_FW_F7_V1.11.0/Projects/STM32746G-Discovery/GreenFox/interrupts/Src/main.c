@@ -52,6 +52,9 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef uart_handle;
+GPIO_InitTypeDef conf;                // create the configuration struct
+
+
 
 volatile uint32_t timIntPeriod;
 
@@ -97,9 +100,18 @@ int main(void) {
 	 - Low Level Initialization
 	 */
 	HAL_Init();
+	__HAL_RCC_GPIOI_CLK_ENABLE();
 
 	/* Configure the System clock to have a frequency of 216 MHz */
 	SystemClock_Config();
+
+	conf.Pin = GPIO_PIN_11;               // the pin is the 11
+	conf.Pull = GPIO_NOPULL;
+	conf.Speed = GPIO_SPEED_FAST;         // port speed to fast
+	conf.Mode = GPIO_MODE_IT_RISING;
+
+	HAL_GPIO_Init(GPIOI, &conf);
+
 
 	BSP_PB_Init(BUTTON_WAKEUP, BUTTON_MODE_EXTI);
 
@@ -122,6 +134,11 @@ int main(void) {
 
 	while (1) {
 	}
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	BSP_LED_Toggle(LED_GREEN);
 }
 
 /**
