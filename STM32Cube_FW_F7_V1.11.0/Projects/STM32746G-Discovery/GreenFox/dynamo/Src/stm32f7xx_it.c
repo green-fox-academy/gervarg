@@ -48,7 +48,7 @@
 /** @addtogroup Templates
   * @{
   */
-extern TIM_HandleTypeDef TimHandle;
+extern TIM_HandleTypeDef TimerIT;
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -171,9 +171,9 @@ void EXTI15_10_IRQHandler()
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_11);
 }
 
-void TIM2_IRQHandler(void)
+void TIM3_IRQHandler(void)
 {
-	HAL_TIM_IRQHandler(&TimHandle);
+	HAL_TIM_IRQHandler(&TimerIT);
 }
 
 /**

@@ -54,8 +54,14 @@
 UART_HandleTypeDef uart_handle;
 GPIO_InitTypeDef conf;                // create the configuration struct
 TIM_HandleTypeDef TimHandle;
+TIM_OC_InitTypeDef sConfig;
+GPIO_InitTypeDef ledConfig;
+TIM_HandleTypeDef TimerIT;
 
 volatile uint32_t timIntPeriod;
+volatile uint32_t first_button_push;
+volatile int average_time[5];
+volatile int counter = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -71,6 +77,9 @@ static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
+void Timer_Pwm_Init(void);
+void Led_Init(void);
+void TimerIT_Init(void);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -99,17 +108,14 @@ int main(void) {
 	 - Low Level Initialization
 	 */
 	HAL_Init();
-	__HAL_RCC_GPIOI_CLK_ENABLE();
-	__HAL_RCC_TIM2_CLK_ENABLE();
+	__HAL_RCC_GPIOI_CLK_ENABLE()
+	;
 
-	TimHandle.Instance = TIM2;
-	TimHandle.Init.Period = 500;
-	TimHandle.Init.Prescaler = 54000;
-	TimHandle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
+	Timer_Pwm_Init();
+	Led_Init();
+	TimerIT_Init();
 
 	HAL_TIM_Base_Init(&TimHandle);
-
 
 	/* Configure the System clock to have a frequency of 216 MHz */
 	SystemClock_Config();
@@ -140,25 +146,80 @@ int main(void) {
 
 	/* assign the lowest priority to our interrupt line */
 	HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0x0F, 0x00);
-	HAL_NVIC_SetPriority(TIM2_IRQn, 0x0F, 0x00);
 
 	/* tell the interrupt handling unit to process our interrupts */
 	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
-	HAL_NVIC_EnableIRQ(TIM2_IRQn);
-
-	HAL_TIM_Base_Start_IT(&TimHandle);
 
 	while (1) {
+
 	}
 }
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-	BSP_LED_Toggle(LED_GREEN);
+void Led_Init(void) {
+	__HAL_RCC_GPIOA_CLK_ENABLE()
+	;
+	ledConfig.Pin = GPIO_PIN_15;
+	ledConfig.Mode = GPIO_MODE_AF_PP;
+	ledConfig.Pull = GPIO_NOPULL;
+	ledConfig.Speed = GPIO_SPEED_HIGH;
+	ledConfig.Alternate = GPIO_AF1_TIM2;
+
+	HAL_GPIO_Init(GPIOA, &ledConfig);
 }
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *timhandle)
-{
-	BSP_LED_Toggle(LED_GREEN);
+void TimerIT_Init(void) {
+	__HAL_RCC_TIM3_CLK_ENABLE()
+	;
+	TimerIT.Instance = TIM3;
+	TimerIT.Init.Period = 100;
+	TimerIT.Init.Prescaler = 54000;
+	TimerIT.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	TimerIT.Init.CounterMode = TIM_COUNTERMODE_UP;
+
+	HAL_TIM_Base_Init(&TimerIT);
+	HAL_TIM_Base_Start_IT(&TimerIT);
+
+	HAL_NVIC_SetPriority(TIM3_IRQn, 0x0F, 0x00);
+	HAL_NVIC_EnableIRQ(TIM3_IRQn);
+}
+
+void Timer_Pwm_Init(void) {
+	__HAL_RCC_TIM2_CLK_ENABLE()
+	;
+	TimHandle.Instance = TIM2;
+	TimHandle.Init.Period = 1000;
+	TimHandle.Init.Prescaler = 1;
+	TimHandle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
+
+	sConfig.Pulse = 0;
+	sConfig.OCMode = TIM_OCMODE_PWM1;
+	sConfig.OCPolarity = TIM_OCPOLARITY_HIGH;
+	sConfig.OCFastMode = TIM_OCFAST_ENABLE;
+
+	HAL_TIM_PWM_Init(&TimHandle);
+
+	HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_1);
+
+	HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_1);
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	if (TIM2->CCR1 < 1000) {
+		TIM2->CCR1 += 100;
+	}
+
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *timhandle) {
+	if (TIM2->CCR1 > 0) {
+		TIM2->CCR1 -= 10;
+	} else {
+		__HAL_TIM_SET_COMPARE(&TimerIT, TIM_CHANNEL_1, 0);
+	}
+	if (TIM2->CCR1 % 10 == 0 && TIM2->CCR1 != 0) {
+		printf("Led counter: %d\n", TIM2->CCR1);
+	}
 }
 
 /**
