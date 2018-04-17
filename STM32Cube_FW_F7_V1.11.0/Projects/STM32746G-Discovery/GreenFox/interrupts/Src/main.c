@@ -53,8 +53,7 @@
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef uart_handle;
 GPIO_InitTypeDef conf;                // create the configuration struct
-
-
+TIM_HandleTypeDef TimHandle;
 
 volatile uint32_t timIntPeriod;
 
@@ -101,6 +100,16 @@ int main(void) {
 	 */
 	HAL_Init();
 	__HAL_RCC_GPIOI_CLK_ENABLE();
+	__HAL_RCC_TIM2_CLK_ENABLE();
+
+	TimHandle.Instance = TIM2;
+	TimHandle.Init.Period = 500;
+	TimHandle.Init.Prescaler = 54000;
+	TimHandle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
+
+	HAL_TIM_Base_Init(&TimHandle);
+
 
 	/* Configure the System clock to have a frequency of 216 MHz */
 	SystemClock_Config();
@@ -111,7 +120,6 @@ int main(void) {
 	conf.Mode = GPIO_MODE_IT_RISING;
 
 	HAL_GPIO_Init(GPIOI, &conf);
-
 
 	BSP_PB_Init(BUTTON_WAKEUP, BUTTON_MODE_EXTI);
 
@@ -128,15 +136,27 @@ int main(void) {
 
 	BSP_COM_Init(COM1, &uart_handle);
 
-
 	printf("\n**********WELCOME in interrupts WS**********\r\n\n");
 
+	/* assign the lowest priority to our interrupt line */
+	HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0x0F, 0x00);
+	HAL_NVIC_SetPriority(TIM2_IRQn, 0x0F, 0x00);
+
+	/* tell the interrupt handling unit to process our interrupts */
+	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+	HAL_NVIC_EnableIRQ(TIM2_IRQn);
+
+	HAL_TIM_Base_Start_IT(&TimHandle);
 
 	while (1) {
 	}
 }
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	BSP_LED_Toggle(LED_GREEN);
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *timhandle)
 {
 	BSP_LED_Toggle(LED_GREEN);
 }
