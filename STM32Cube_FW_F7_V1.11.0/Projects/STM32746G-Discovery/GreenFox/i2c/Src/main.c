@@ -165,7 +165,7 @@ int main(void) {
 
 
 	//HAL_I2C_Master_Transmit_IT(&I2cHandle, TEMP_LOG_ADDRESS, &temp_reg, 1);
-	HAL_I2C_Master_Receive_IT(&I2cHandle, TEMP_LOG_ADDRESS, &temp_buffer, 1);
+	//HAL_I2C_Master_Receive_IT(&I2cHandle, TEMP_LOG_ADDRESS, &temp_buffer, 1);
 
 
 	while (1) {
@@ -173,17 +173,17 @@ int main(void) {
 				10);
 		/*HAL_I2C_Master_Receive(&I2cHandle, TEMP_LOG_ADDRESS, &temp_buffer, 1, 2000);
 		printf("%d\n", temp_buffer);*/
-		//HAL_Delay(1000);
+		HAL_I2C_Master_Transmit_IT(&I2cHandle, TEMP_LOG_ADDRESS, &temp_reg, 1);
+		HAL_Delay(1000);
 	}
 }
 
-/*void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c) {
+void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c) {
 	HAL_I2C_Master_Receive_IT(&I2cHandle, TEMP_LOG_ADDRESS, (uint8_t*) &temp_buffer, 1);
-}*/
+}
 
 void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
-	HAL_I2C_Master_Transmit(&I2cHandle, TEMP_LOG_ADDRESS, &temp_reg, 1, 5);
 	printf("%d\n", temp_buffer);
 
 }
