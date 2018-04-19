@@ -58,7 +58,6 @@ typedef enum {
 UART_HandleTypeDef uart_handle;
 GPIO_InitTypeDef conf;                // create the configuration struct
 TIM_HandleTypeDef TimHandle;
-TIM_HandleTypeDef TimHandle2;
 
 volatile uint32_t timIntPeriod;
 volatile int counter = 0;
@@ -107,12 +106,9 @@ int main(void) {
 	 - Low Level Initialization
 	 */
 	HAL_Init();
-	__HAL_RCC_GPIOI_CLK_ENABLE()
-	;
-	__HAL_RCC_TIM2_CLK_ENABLE()
-	;
-	__HAL_RCC_TIM3_CLK_ENABLE()
-	;
+	__HAL_RCC_GPIOI_CLK_ENABLE();
+	__HAL_RCC_TIM2_CLK_ENABLE();
+
 
 	TimHandle.Instance = TIM2;
 	TimHandle.Init.Period = 250;
@@ -121,14 +117,6 @@ int main(void) {
 	TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
 
 	HAL_TIM_Base_Init(&TimHandle);
-
-	TimHandle2.Instance = TIM3;
-	TimHandle2.Init.Period = 250;
-	TimHandle2.Init.Prescaler = 54000;
-	TimHandle2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	TimHandle2.Init.CounterMode = TIM_COUNTERMODE_UP;
-
-	HAL_TIM_Base_Init(&TimHandle2);
 
 	/* Configure the System clock to have a frequency of 216 MHz */
 	SystemClock_Config();
