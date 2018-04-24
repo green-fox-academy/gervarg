@@ -50,6 +50,7 @@
   */
 
 /* Private typedef -----------------------------------------------------------*/
+extern TIM_HandleTypeDef Timer_IT;
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -169,7 +170,10 @@ void SysTick_Handler(void)
 
 //TODO:
 // Add timer irq handler. See startup_stm32f746xx.s for the proper irq handler function name!
-
+void TIM4_IRQHandler(void)
+{
+	HAL_TIM_IRQHandler(&Timer_IT);
+}
 
 /**
   * @brief  This function handles PPP interrupt request.
