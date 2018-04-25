@@ -170,7 +170,7 @@ void SysTick_Handler(void)
 
 //TODO:
 // Add timer irq handler. See startup_stm32f746xx.s for the proper irq handler function name!
-void TIM4_IRQHandler(void)
+void TIM2_IRQHandler(void)
 {
 	HAL_TIM_IRQHandler(&Timer_IT);
 }

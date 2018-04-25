@@ -38,6 +38,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32746g_discovery_lcd.h"
+#include <string.h>
 
 /** @addtogroup STM32F7xx_HAL_Examples
  * @{
@@ -59,6 +60,14 @@ TIM_HandleTypeDef Timer_PWM;
 TIM_IC_InitTypeDef IC_conf;
 TIM_OC_InitTypeDef sConfig;
 GPIO_InitTypeDef gpio_init_structure;
+GPIO_InitTypeDef gpio_IC_init;
+UART_HandleTypeDef uart_handle;
+
+
+volatile input_capture_data_t input_capture;
+
+
+
 
 /* Private define ------------------------------------------------------------*/
 //#define USE_P_CTRLER
@@ -66,6 +75,15 @@ GPIO_InitTypeDef gpio_init_structure;
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
+#ifdef __GNUC__
+/* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
+ set to 'Yes') calls __io_putchar() */
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
+
+
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
@@ -88,6 +106,10 @@ int main(void) {
 	/* Configure the MPU attributes as Write Through */
 	MPU_Config();
 
+	input_capture.ovf = 0;
+	input_capture.last = 0;
+	input_capture.prev = 0;
+
 	/* Enable the CPU Cache */
 	CPU_CACHE_Enable();
 
@@ -101,40 +123,22 @@ int main(void) {
 
 	/* Configure the System clock to have a frequency of 216 MHz */
 	SystemClock_Config();
-	__HAL_RCC_TIM3_CLK_ENABLE();
-	__HAL_RCC_TIM2_CLK_ENABLE();
-	__HAL_RCC_GPIOA_CLK_ENABLE();
-	__HAL_RCC_GPIOB_CLK_ENABLE();
-
+	clock_enable_init();
+	timer_pwm_init();
+	gpio_pwm_init();
+	//uart_init();
 
 
 	Timer_IT.Instance = TIM2;
-	Timer_IT.Init.Period = 1000;
+	Timer_IT.Init.Period = 65535;
 	Timer_IT.Init.Prescaler = 0;
 	Timer_IT.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	Timer_IT.Init.CounterMode = TIM_COUNTERMODE_UP;
 
 	HAL_TIM_Base_Init(&Timer_IT);
-	HAL_TIM_Base_Start(&Timer_IT);
+	HAL_TIM_Base_Start_IT(&Timer_IT);
 
-	Timer_PWM.Instance = TIM3;
-	Timer_PWM.Init.Period = 1000;
-	Timer_PWM.Init.Prescaler = 1;
-	Timer_PWM.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	Timer_PWM.Init.CounterMode = TIM_COUNTERMODE_UP;
 
-	HAL_TIM_Base_Init(&Timer_PWM);
-	HAL_TIM_Base_Start(&Timer_PWM);
-
-	HAL_TIM_PWM_Init(&Timer_PWM);
-
-	sConfig.Pulse = 50;
-	sConfig.OCMode = TIM_OCMODE_PWM1;
-	sConfig.OCPolarity = TIM_OCPOLARITY_HIGH;
-	sConfig.OCFastMode = TIM_OCFAST_ENABLE;
-
-	HAL_TIM_PWM_ConfigChannel(&Timer_PWM, &sConfig, TIM_CHANNEL_1);
-	HAL_TIM_PWM_Start(&Timer_PWM, TIM_CHANNEL_1);
 
 	IC_conf.ICSelection = TIM_ICSELECTION_DIRECTTI;
 	IC_conf.ICPolarity = TIM_ICPOLARITY_RISING;
@@ -145,15 +149,27 @@ int main(void) {
 
 	HAL_TIM_IC_Start_IT(&Timer_IT, TIM_CHANNEL_1);
 
-	gpio_init_structure.Alternate = GPIO_AF2_TIM3;
-	gpio_init_structure.Mode = GPIO_MODE_AF_PP;
-	gpio_init_structure.Pin = GPIO_PIN_4;
-	gpio_init_structure.Pull = GPIO_NOPULL;
-	gpio_init_structure.Speed = GPIO_SPEED_HIGH;
+	gpio_IC_init.Pin = GPIO_PIN_15;
+	gpio_IC_init.Speed = GPIO_SPEED_FAST;
+	gpio_IC_init.Mode = GPIO_MODE_INPUT;
+	gpio_IC_init.Pull = GPIO_PULLUP;
+	gpio_IC_init.Alternate = GPIO_AF1_TIM2;
 
-	HAL_GPIO_Init(GPIOB, &gpio_init_structure);
+	HAL_GPIO_Init(GPIOA, &gpio_IC_init);
 
 
+
+	HAL_NVIC_SetPriority(TIM2_IRQn, 0x0F, 0x00);
+	HAL_NVIC_EnableIRQ(TIM2_IRQn);
+
+	uart_handle.Init.BaudRate = 115200;
+	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
+	uart_handle.Init.StopBits = UART_STOPBITS_1;
+	uart_handle.Init.Parity = UART_PARITY_NONE;
+	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+	uart_handle.Init.Mode = UART_MODE_TX_RX;
+
+	BSP_COM_Init(COM1, &uart_handle);
 
 	/* Add your application code here */
 	BSP_LED_Init(LED_GREEN);
@@ -162,6 +178,7 @@ int main(void) {
 	BSP_LCD_SelectLayer(0);
 	BSP_LCD_DisplayOn();
 	BSP_LCD_Clear(LCD_COLOR_BLACK);
+	printf("Input capture start\r\n");
 
 	int8_t cntr = 0;
 	/* Infinite loop */
@@ -172,17 +189,26 @@ int main(void) {
 		BSP_LCD_DisplayStringAtLine(0, (uint8_t *) buff);
 		cntr++;
 		BSP_LED_Toggle(LED_GREEN);
-		for (int i = 0; i < 50; i++) {
+		//TIM3->CCR1 = 1000;
+		for (int i = 0; i < 1000; i++) {
 			TIM3->CCR1 = i;
-			HAL_Delay(50);
+			HAL_Delay(10);
 		}
-		for (int i = 50; i >= 0; i--) {
+		for (int i = 1000; i >= 0; i--) {
 			TIM3->CCR1 = i;
-			HAL_Delay(50);
+			HAL_Delay(10);
 		}
 
 		HAL_Delay(10);
 	}
+}
+
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+	input_capture.last = HAL_TIM_ReadCapturedValue(htim,TIM_CHANNEL_1);
+	printf("%d\n", input_capture.last);
+	HAL_TIM_Base_Start_IT(&Timer_IT);
+	HAL_TIM_IC_Start_IT(&Timer_IT, TIM_CHANNEL_1);
 }
 
 /**
@@ -239,6 +265,14 @@ static void SystemClock_Config(void) {
 	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK) {
 		Error_Handler();
 	}
+}
+
+PUTCHAR_PROTOTYPE {
+	/* Place your implementation of fputc here */
+	/* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
+	HAL_UART_Transmit(&uart_handle, (uint8_t *) &ch, 1, 0xFFFF);
+
+	return ch;
 }
 
 /**
