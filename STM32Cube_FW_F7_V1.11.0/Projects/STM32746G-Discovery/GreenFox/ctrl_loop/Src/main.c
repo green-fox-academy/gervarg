@@ -136,7 +136,7 @@ int main(void) {
 
 	Timer_IT.Instance = TIM2;
 	Timer_IT.Init.Period = IC_PERIOD;
-	Timer_IT.Init.Prescaler = 5400;
+	Timer_IT.Init.Prescaler = 54;
 	Timer_IT.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	Timer_IT.Init.CounterMode = TIM_COUNTERMODE_UP;
 
@@ -185,9 +185,10 @@ int main(void) {
 	BSP_LCD_Clear(LCD_COLOR_BLACK);
 	printf("Input capture start\r\n");
 
+	char buff[100];
 	/* Infinite loop */
 	while (1) {
-		char buff[100];
+
 		BSP_LED_Toggle(LED_GREEN);
 		TIM3->CCR1 = 1000;
 		if (state == 2) {
@@ -203,10 +204,22 @@ int main(void) {
 			TIM3->CCR1 = i;
 			HAL_Delay(10);
 		}*/
-		sprintf(buff, "%f Hz\n", freq);
-		HAL_UART_Transmit(&uart_handle, (uint8_t *) &buff, 20, 0xFFFF);
+		sprintf(buff, "%f ", freq);
+		HAL_UART_Transmit(&uart_handle, (uint8_t *) &buff, 15, 0xFFFF);
 		BSP_LCD_ClearStringLine(0);
 		BSP_LCD_DisplayStringAtLine(0, (uint8_t *) buff);
+
+		sprintf(buff, "%d ", input_capture.last);
+		BSP_LCD_ClearStringLine(1);
+		BSP_LCD_DisplayStringAtLine(1, (uint8_t *) buff);
+
+		sprintf(buff, "%d ", input_capture.prev);
+		BSP_LCD_ClearStringLine(2);
+		BSP_LCD_DisplayStringAtLine(2, (uint8_t *) buff);
+
+//		sprintf(buff, "%d ", TIM2->CNT);
+//		BSP_LCD_ClearStringLine(0);
+//		BSP_LCD_DisplayStringAtLine(0, (uint8_t *) buff);
 		HAL_Delay(100);
 	}
 }
@@ -225,11 +238,12 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
+	input_capture.ovf++;
 	if (state == 2){
 		input_capture.ovf = 0;
 		state = 0;
 	}
-	input_capture.ovf++;
+
 }
 
 float get_freq()
@@ -286,7 +300,7 @@ static void SystemClock_Config(void) {
 			| RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
 	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
 	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV8;
 	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK) {
 		Error_Handler();
