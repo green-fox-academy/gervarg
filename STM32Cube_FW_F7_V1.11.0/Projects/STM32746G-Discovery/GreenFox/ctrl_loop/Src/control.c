@@ -24,7 +24,6 @@ void p_init(p_ctrler_t *ctrler)
 	ctrler->ref = 0;
 	ctrler->sense = 0;
 	ctrler->out = 0;
-	ctrler->out = 0;
 	ctrler->out_max = 0;
 	ctrler->out_min = 0;
 }

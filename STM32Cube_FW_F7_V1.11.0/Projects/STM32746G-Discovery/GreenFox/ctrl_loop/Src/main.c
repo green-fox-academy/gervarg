@@ -62,6 +62,7 @@ TIM_OC_InitTypeDef sConfig;
 GPIO_InitTypeDef gpio_init_structure;
 GPIO_InitTypeDef gpio_IC_init;
 UART_HandleTypeDef uart_handle;
+p_ctrler_t P_controller;
 
 
 volatile input_capture_data_t input_capture;
@@ -93,6 +94,7 @@ static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
 float get_freq();
+void set_pwm(void);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -118,6 +120,8 @@ int main(void) {
 	/* Enable the CPU Cache */
 	CPU_CACHE_Enable();
 
+
+
 	/* STM32F7xx HAL library initialization:
 	 - Configure the Flash ART accelerator on ITCM interface
 	 - Configure the Systick to generate an interrupt each 1 msec
@@ -133,6 +137,11 @@ int main(void) {
 	gpio_pwm_init();
 	//uart_init();
 
+	p_init(&P_controller);
+	P_controller.ref = 400;
+	P_controller.out_max = 450;
+	P_controller.out_min = 200;
+
 
 	Timer_IT.Instance = TIM2;
 	Timer_IT.Init.Period = IC_PERIOD;
@@ -143,8 +152,6 @@ int main(void) {
 	HAL_TIM_Base_Init(&Timer_IT);
 	HAL_TIM_Base_Start_IT(&Timer_IT);
 
-
-
 	IC_conf.ICSelection = TIM_ICSELECTION_DIRECTTI;
 	IC_conf.ICPolarity = TIM_ICPOLARITY_RISING;
 	IC_conf.ICPrescaler = TIM_ICPSC_DIV1;
@@ -154,6 +161,8 @@ int main(void) {
 
 	HAL_TIM_IC_Start_IT(&Timer_IT, TIM_CHANNEL_1);
 
+
+
 	gpio_IC_init.Pin = GPIO_PIN_15;
 	gpio_IC_init.Speed = GPIO_SPEED_FAST;
 	gpio_IC_init.Mode = GPIO_MODE_AF_OD;
@@ -161,8 +170,6 @@ int main(void) {
 	gpio_IC_init.Alternate = GPIO_AF1_TIM2;
 
 	HAL_GPIO_Init(GPIOA, &gpio_IC_init);
-
-
 
 	HAL_NVIC_SetPriority(TIM2_IRQn, 0x0F, 0x00);
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
@@ -190,12 +197,22 @@ int main(void) {
 	while (1) {
 
 		BSP_LED_Toggle(LED_GREEN);
-		TIM3->CCR1 = 1000;
+		//TIM3->CCR1 = 450;
+
+
 		if (state == 2) {
 			T_period = (float)((input_capture.ovf * IC_PERIOD +
 					input_capture.last - input_capture.prev) * 0.001);
 			freq = get_freq();
 		}
+		HAL_Delay(10);
+		P_controller.sense = freq;
+		p_control(&P_controller);
+		set_pwm();
+
+
+
+
 		/*for (int i = 0; i < 1000; i++) {
 			TIM3->CCR1 = i;
 			HAL_Delay(10);
@@ -209,18 +226,22 @@ int main(void) {
 		BSP_LCD_ClearStringLine(0);
 		BSP_LCD_DisplayStringAtLine(0, (uint8_t *) buff);
 
-		sprintf(buff, "%d ", input_capture.last);
+
+		sprintf(buff, "%f ", p_control(&P_controller));
 		BSP_LCD_ClearStringLine(1);
 		BSP_LCD_DisplayStringAtLine(1, (uint8_t *) buff);
-
-		sprintf(buff, "%d ", input_capture.prev);
-		BSP_LCD_ClearStringLine(2);
-		BSP_LCD_DisplayStringAtLine(2, (uint8_t *) buff);
+//		sprintf(buff, "%d ", input_capture.last);
+//		BSP_LCD_ClearStringLine(1);
+//		BSP_LCD_DisplayStringAtLine(1, (uint8_t *) buff);
+//
+//		sprintf(buff, "%d ", input_capture.prev);
+//		BSP_LCD_ClearStringLine(2);
+//		BSP_LCD_DisplayStringAtLine(2, (uint8_t *) buff);
 
 //		sprintf(buff, "%d ", TIM2->CNT);
 //		BSP_LCD_ClearStringLine(0);
 //		BSP_LCD_DisplayStringAtLine(0, (uint8_t *) buff);
-		HAL_Delay(100);
+
 	}
 }
 
@@ -244,6 +265,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		state = 0;
 	}
 
+}
+
+void set_pwm(void)
+{
+	TIM3-> CCR1 = P_controller.out;
 }
 
 float get_freq()
