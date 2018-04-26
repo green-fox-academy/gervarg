@@ -65,11 +65,15 @@ UART_HandleTypeDef uart_handle;
 
 
 volatile input_capture_data_t input_capture;
+volatile int state = 0;
+volatile float T_period  = 0;
+volatile float freq = 0;
 
 
 
 
 /* Private define ------------------------------------------------------------*/
+#define IC_PERIOD 65535
 //#define USE_P_CTRLER
 
 /* Private macro -------------------------------------------------------------*/
@@ -88,6 +92,7 @@ static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
+float get_freq();
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -130,8 +135,8 @@ int main(void) {
 
 
 	Timer_IT.Instance = TIM2;
-	Timer_IT.Init.Period = 65535;
-	Timer_IT.Init.Prescaler = 0;
+	Timer_IT.Init.Period = IC_PERIOD;
+	Timer_IT.Init.Prescaler = 5400;
 	Timer_IT.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	Timer_IT.Init.CounterMode = TIM_COUNTERMODE_UP;
 
@@ -151,7 +156,7 @@ int main(void) {
 
 	gpio_IC_init.Pin = GPIO_PIN_15;
 	gpio_IC_init.Speed = GPIO_SPEED_FAST;
-	gpio_IC_init.Mode = GPIO_MODE_INPUT;
+	gpio_IC_init.Mode = GPIO_MODE_AF_OD;
 	gpio_IC_init.Pull = GPIO_PULLUP;
 	gpio_IC_init.Alternate = GPIO_AF1_TIM2;
 
@@ -180,35 +185,56 @@ int main(void) {
 	BSP_LCD_Clear(LCD_COLOR_BLACK);
 	printf("Input capture start\r\n");
 
-	int8_t cntr = 0;
 	/* Infinite loop */
 	while (1) {
 		char buff[100];
-		sprintf(buff, "%d", cntr);
-		BSP_LCD_ClearStringLine(0);
-		BSP_LCD_DisplayStringAtLine(0, (uint8_t *) buff);
-		cntr++;
 		BSP_LED_Toggle(LED_GREEN);
-		//TIM3->CCR1 = 1000;
-		for (int i = 0; i < 1000; i++) {
+		TIM3->CCR1 = 1000;
+		if (state == 2) {
+			T_period = (float)((input_capture.ovf * IC_PERIOD +
+					input_capture.last - input_capture.prev) * 0.001);
+			freq = get_freq();
+		}
+		/*for (int i = 0; i < 1000; i++) {
 			TIM3->CCR1 = i;
 			HAL_Delay(10);
 		}
 		for (int i = 1000; i >= 0; i--) {
 			TIM3->CCR1 = i;
 			HAL_Delay(10);
-		}
-
-		HAL_Delay(10);
+		}*/
+		sprintf(buff, "%f Hz\n", freq);
+		HAL_UART_Transmit(&uart_handle, (uint8_t *) &buff, 20, 0xFFFF);
+		BSP_LCD_ClearStringLine(0);
+		BSP_LCD_DisplayStringAtLine(0, (uint8_t *) buff);
+		HAL_Delay(100);
 	}
 }
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
-	input_capture.last = HAL_TIM_ReadCapturedValue(htim,TIM_CHANNEL_1);
-	printf("%d\n", input_capture.last);
-	HAL_TIM_Base_Start_IT(&Timer_IT);
-	HAL_TIM_IC_Start_IT(&Timer_IT, TIM_CHANNEL_1);
+	if (state == 0){
+		input_capture.prev = HAL_TIM_ReadCapturedValue(htim,TIM_CHANNEL_1);
+		state = 1;
+	} else if (state == 1) {
+		input_capture.last = HAL_TIM_ReadCapturedValue(htim,TIM_CHANNEL_1);
+		state = 2;
+	}
+
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if (state == 2){
+		input_capture.ovf = 0;
+		state = 0;
+	}
+	input_capture.ovf++;
+}
+
+float get_freq()
+{
+	return (1 / T_period) * 1000;
 }
 
 /**
