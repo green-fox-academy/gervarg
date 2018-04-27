@@ -124,7 +124,7 @@ void clock_enable_init(void)
 void timer_pwm_init(void)
 {
 	Timer_PWM.Instance = TIM3;
-	Timer_PWM.Init.Period = 450;
+	Timer_PWM.Init.Period = 100;
 	Timer_PWM.Init.Prescaler = 1;
 	Timer_PWM.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	Timer_PWM.Init.CounterMode = TIM_COUNTERMODE_UP;

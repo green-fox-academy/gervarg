@@ -1,9 +1,9 @@
 #include "control.h"
 #include <stdio.h>
 
-#define DEFAULT_P			0.1
-#define DEFAULT_PI_P		0.05
-#define DEFAULT_PI_I		0.01
+#define DEFAULT_P			10
+#define DEFAULT_PI_P		5
+#define DEFAULT_PI_I		1
 
 void pi_init(pi_ctrler_t *ctrler)
 {

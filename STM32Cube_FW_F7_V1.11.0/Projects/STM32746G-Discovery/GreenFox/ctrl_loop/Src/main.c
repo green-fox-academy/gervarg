@@ -63,6 +63,7 @@ GPIO_InitTypeDef gpio_init_structure;
 GPIO_InitTypeDef gpio_IC_init;
 UART_HandleTypeDef uart_handle;
 p_ctrler_t P_controller;
+pi_ctrler_t PI_controller;
 
 
 volatile input_capture_data_t input_capture;
@@ -137,10 +138,15 @@ int main(void) {
 	gpio_pwm_init();
 	//uart_init();
 
-	p_init(&P_controller);
-	P_controller.ref = 400;
-	P_controller.out_max = 450;
-	P_controller.out_min = 200;
+//	p_init(&P_controller);
+//	P_controller.ref = 30;
+//	P_controller.out_max = 100;
+//	P_controller.out_min = 20;
+
+	pi_init(&PI_controller);
+	PI_controller.ref = 50;
+	PI_controller.out_max = 100;
+	PI_controller.out_min = 30;
 
 
 	Timer_IT.Instance = TIM2;
@@ -205,10 +211,12 @@ int main(void) {
 					input_capture.last - input_capture.prev) * 0.001);
 			freq = get_freq();
 		}
-		HAL_Delay(10);
-		P_controller.sense = freq;
-		p_control(&P_controller);
-		set_pwm();
+
+//		P_controller.sense = freq / 5;
+//		TIM3-> CCR1 = (int) p_control(&P_controller);
+		PI_controller.sense = freq / 5;
+		TIM3-> CCR1 = (int) pi_control(&PI_controller);
+		//set_pwm();
 
 
 
@@ -227,9 +235,10 @@ int main(void) {
 		BSP_LCD_DisplayStringAtLine(0, (uint8_t *) buff);
 
 
-		sprintf(buff, "%f ", p_control(&P_controller));
+		sprintf(buff, "The duty cycle is %d%%", TIM3->CCR1);
 		BSP_LCD_ClearStringLine(1);
 		BSP_LCD_DisplayStringAtLine(1, (uint8_t *) buff);
+		HAL_Delay(100);
 //		sprintf(buff, "%d ", input_capture.last);
 //		BSP_LCD_ClearStringLine(1);
 //		BSP_LCD_DisplayStringAtLine(1, (uint8_t *) buff);
