@@ -4,8 +4,8 @@
 #define DEFAULT_P			10
 #define DEFAULT_PI_P		5
 #define DEFAULT_PI_I		1
-#define DEFAULT_PID_P		3
-#define DEFAULT_PID_I		1
+#define DEFAULT_PID_P		1
+#define DEFAULT_PID_I		0.5
 #define DEFAULT_PID_D		0.05
 
 void pid_init(pid_ctrler_t *ctrler)
