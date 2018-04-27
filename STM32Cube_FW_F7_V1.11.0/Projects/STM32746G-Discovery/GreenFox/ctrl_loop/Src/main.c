@@ -68,9 +68,11 @@ pid_ctrler_t PID_controller;
 
 
 volatile input_capture_data_t input_capture;
-volatile int state = 0;
+volatile int counter = 0;
 volatile float T_period  = 0;
 volatile float freq = 0;
+volatile int freq_aver[3] = {0};
+volatile float aver = 0;
 
 
 
@@ -151,7 +153,7 @@ int main(void) {
 
 	pid_init(&PID_controller);
 	PID_controller.ref = 50;
-	PID_controller.out_max = 80;
+	PID_controller.out_max = 100;
 	PID_controller.out_min = 30;
 
 
@@ -213,33 +215,15 @@ int main(void) {
 		//TIM3->CCR1 = 450;
 
 
-		if (state == 2) {
-			T_period = (float)((input_capture.ovf * IC_PERIOD +
-					input_capture.last - input_capture.prev) * 0.001);
-			freq = get_freq();
-		}
 
 //		P_controller.sense = freq / 5;
 //		TIM3-> CCR1 = (int) p_control(&P_controller);
 //		PI_controller.sense = freq / 5;
 //		TIM3-> CCR1 = (int) pi_control(&PI_controller);
 
-		PID_controller.sense = freq / 5;
+		PID_controller.sense = aver / 5;
 		TIM3-> CCR1 = (int) pid_control(&PID_controller);
-		//set_pwm();
-
-
-
-
-		/*for (int i = 0; i < 1000; i++) {
-			TIM3->CCR1 = i;
-			HAL_Delay(10);
-		}
-		for (int i = 1000; i >= 0; i--) {
-			TIM3->CCR1 = i;
-			HAL_Delay(10);
-		}*/
-		sprintf(buff, "%f ", freq);
+		sprintf(buff, "%f ", aver);
 		HAL_UART_Transmit(&uart_handle, (uint8_t *) &buff, 15, 0xFFFF);
 		BSP_LCD_ClearStringLine(0);
 		BSP_LCD_DisplayStringAtLine(0, (uint8_t *) buff);
@@ -249,41 +233,35 @@ int main(void) {
 		BSP_LCD_ClearStringLine(1);
 		BSP_LCD_DisplayStringAtLine(1, (uint8_t *) buff);
 		HAL_Delay(100);
-//		sprintf(buff, "%d ", input_capture.last);
-//		BSP_LCD_ClearStringLine(1);
-//		BSP_LCD_DisplayStringAtLine(1, (uint8_t *) buff);
-//
-//		sprintf(buff, "%d ", input_capture.prev);
-//		BSP_LCD_ClearStringLine(2);
-//		BSP_LCD_DisplayStringAtLine(2, (uint8_t *) buff);
-
-//		sprintf(buff, "%d ", TIM2->CNT);
-//		BSP_LCD_ClearStringLine(0);
-//		BSP_LCD_DisplayStringAtLine(0, (uint8_t *) buff);
-
 	}
 }
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
-	if (state == 0){
-		input_capture.prev = HAL_TIM_ReadCapturedValue(htim,TIM_CHANNEL_1);
-		state = 1;
-	} else if (state == 1) {
-		input_capture.last = HAL_TIM_ReadCapturedValue(htim,TIM_CHANNEL_1);
-		state = 2;
+	input_capture.prev = input_capture.last;
+	input_capture.last = HAL_TIM_ReadCapturedValue(htim,TIM_CHANNEL_1);
+	T_period = (float)((input_capture.ovf * IC_PERIOD +
+							input_capture.last - input_capture.prev) * 0.001);
+
+	freq = get_freq();
+	freq_aver[counter] = freq;
+	counter++;
+	if (counter == 4){
+		int sum = 0;
+		for (int i = 0; i < counter - 1; i++) {
+			sum += freq_aver[i];
+		}
+		aver = sum / (counter - 1);
+		counter = 0;
 	}
+	input_capture.ovf = 0;
+
 
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	input_capture.ovf++;
-	if (state == 2){
-		input_capture.ovf = 0;
-		state = 0;
-	}
-
 }
 
 void set_pwm(void)
