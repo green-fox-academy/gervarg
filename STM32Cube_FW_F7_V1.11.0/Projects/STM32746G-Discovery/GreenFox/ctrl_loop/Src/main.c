@@ -64,6 +64,7 @@ GPIO_InitTypeDef gpio_IC_init;
 UART_HandleTypeDef uart_handle;
 p_ctrler_t P_controller;
 pi_ctrler_t PI_controller;
+pid_ctrler_t PID_controller;
 
 
 volatile input_capture_data_t input_capture;
@@ -143,10 +144,16 @@ int main(void) {
 //	P_controller.out_max = 100;
 //	P_controller.out_min = 20;
 
-	pi_init(&PI_controller);
-	PI_controller.ref = 50;
-	PI_controller.out_max = 100;
-	PI_controller.out_min = 30;
+//	pi_init(&PI_controller);
+//	PI_controller.ref = 50;
+//	PI_controller.out_max = 100;
+//	PI_controller.out_min = 30;
+
+	pid_init(&PID_controller);
+	PID_controller.ref = 50;
+	PID_controller.out_max = 80;
+	PID_controller.out_min = 30;
+
 
 
 	Timer_IT.Instance = TIM2;
@@ -214,8 +221,11 @@ int main(void) {
 
 //		P_controller.sense = freq / 5;
 //		TIM3-> CCR1 = (int) p_control(&P_controller);
-		PI_controller.sense = freq / 5;
-		TIM3-> CCR1 = (int) pi_control(&PI_controller);
+//		PI_controller.sense = freq / 5;
+//		TIM3-> CCR1 = (int) pi_control(&PI_controller);
+
+		PID_controller.sense = freq / 5;
+		TIM3-> CCR1 = (int) pid_control(&PID_controller);
 		//set_pwm();
 
 
