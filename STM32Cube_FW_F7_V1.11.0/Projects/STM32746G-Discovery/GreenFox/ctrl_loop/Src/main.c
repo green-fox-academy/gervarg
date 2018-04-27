@@ -61,10 +61,13 @@ TIM_IC_InitTypeDef IC_conf;
 TIM_OC_InitTypeDef sConfig;
 GPIO_InitTypeDef gpio_init_structure;
 GPIO_InitTypeDef gpio_IC_init;
+GPIO_InitTypeDef gpio_adc_init;
 UART_HandleTypeDef uart_handle;
 p_ctrler_t P_controller;
 pi_ctrler_t PI_controller;
 pid_ctrler_t PID_controller;
+ADC_HandleTypeDef adc_handle;
+ADC_ChannelConfTypeDef adc_chconf;
 
 
 volatile input_capture_data_t input_capture;
@@ -73,12 +76,17 @@ volatile float T_period  = 0;
 volatile float freq = 0;
 volatile int freq_aver[3] = {0};
 volatile float aver = 0;
+volatile int adc_values[3] = {0};
+volatile float adc_aver = 0;
+volatile int adc_count = 0;
 
 
 
 
 /* Private define ------------------------------------------------------------*/
 #define IC_PERIOD 65535
+#define ADC_NORMAL_VOLTAGE		8	// The voltage of the fully recharged battery
+#define ADC_VOLTAGE_DIVIDER		4   /* The value measured on ADC of the fully charged
 //#define USE_P_CTRLER
 
 /* Private macro -------------------------------------------------------------*/
@@ -98,7 +106,7 @@ static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
 float get_freq();
-void set_pwm(void);
+static uint16_t ADC_Measure(void);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -139,7 +147,9 @@ int main(void) {
 	clock_enable_init();
 	timer_pwm_init();
 	gpio_pwm_init();
-	//uart_init();
+	gpio_adc_ini();
+	uart_init();
+	IC_init();
 
 //	p_init(&P_controller);
 //	P_controller.ref = 30;
@@ -157,46 +167,11 @@ int main(void) {
 	PID_controller.out_min = 30;
 
 
-
-	Timer_IT.Instance = TIM2;
-	Timer_IT.Init.Period = IC_PERIOD;
-	Timer_IT.Init.Prescaler = 54;
-	Timer_IT.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	Timer_IT.Init.CounterMode = TIM_COUNTERMODE_UP;
-
-	HAL_TIM_Base_Init(&Timer_IT);
-	HAL_TIM_Base_Start_IT(&Timer_IT);
-
-	IC_conf.ICSelection = TIM_ICSELECTION_DIRECTTI;
-	IC_conf.ICPolarity = TIM_ICPOLARITY_RISING;
-	IC_conf.ICPrescaler = TIM_ICPSC_DIV1;
-	IC_conf.ICFilter = 0;
-
-	HAL_TIM_IC_ConfigChannel(&Timer_IT, &IC_conf, TIM_CHANNEL_1);
-
-	HAL_TIM_IC_Start_IT(&Timer_IT, TIM_CHANNEL_1);
-
-
-
-	gpio_IC_init.Pin = GPIO_PIN_15;
-	gpio_IC_init.Speed = GPIO_SPEED_FAST;
-	gpio_IC_init.Mode = GPIO_MODE_AF_OD;
-	gpio_IC_init.Pull = GPIO_PULLUP;
-	gpio_IC_init.Alternate = GPIO_AF1_TIM2;
-
-	HAL_GPIO_Init(GPIOA, &gpio_IC_init);
-
 	HAL_NVIC_SetPriority(TIM2_IRQn, 0x0F, 0x00);
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
 
-	uart_handle.Init.BaudRate = 115200;
-	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
-	uart_handle.Init.StopBits = UART_STOPBITS_1;
-	uart_handle.Init.Parity = UART_PARITY_NONE;
-	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-	uart_handle.Init.Mode = UART_MODE_TX_RX;
 
-	BSP_COM_Init(COM1, &uart_handle);
+
 
 	/* Add your application code here */
 	BSP_LED_Init(LED_GREEN);
@@ -220,6 +195,7 @@ int main(void) {
 //		TIM3-> CCR1 = (int) p_control(&P_controller);
 //		PI_controller.sense = freq / 5;
 //		TIM3-> CCR1 = (int) pi_control(&PI_controller);
+		PID_controller.ref = ADC_Measure() / 41;
 
 		PID_controller.sense = aver / 5;
 		TIM3-> CCR1 = (int) pid_control(&PID_controller);
@@ -232,8 +208,33 @@ int main(void) {
 		sprintf(buff, "The duty cycle is %d%%", TIM3->CCR1);
 		BSP_LCD_ClearStringLine(1);
 		BSP_LCD_DisplayStringAtLine(1, (uint8_t *) buff);
+
+		sprintf(buff, "ADC %d", ADC_Measure() / 41);
+		BSP_LCD_ClearStringLine(2);
+		BSP_LCD_DisplayStringAtLine(2, (uint8_t *) buff);
 		HAL_Delay(100);
 	}
+}
+
+static uint16_t ADC_Measure(void)
+{
+	HAL_ADC_Start(&adc_handle);
+	if (HAL_ADC_PollForConversion(&adc_handle, 10) == HAL_OK)
+		  {
+		    // ADC conversion completed
+			adc_values[adc_count] = HAL_ADC_GetValue(&adc_handle);
+			adc_count++;
+			if (adc_count == 4) {
+				int sum = 0;
+				for (int i = 0; i < adc_count - 1; i++) {
+					sum += adc_values[i];
+				}
+				adc_aver = sum / (adc_count - 1);
+				adc_count = 0;
+			}
+		    return adc_aver;
+		  }
+	return 1;
 }
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
