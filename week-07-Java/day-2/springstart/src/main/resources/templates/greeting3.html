@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Greeting Thymeleaf</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div th:each="greet : ${hello}" >
+    <p th:style="'color : ' + ${greet.getColor()} + '; font-size : ' + ${greet.getFontSize()}
+    + 'px'" th:text="${greet.getContent()}"></p>
+</div>
+</body>
+</html>
