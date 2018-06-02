@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thymeleaf Exercise #</title>
+    <link rel="stylesheet" th:href="@{/style.css}"/>
+    <meta charset="utf-8"/>
+    <style>
+        th {
+            background-color: gold;
+            color: white;
+        }
+        .isKing {
+            color: magenta;
+        }
+        .isNotKing {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+<table border="1" style="width:100%">
+    <tr>
+        <th>Index</th>
+        <th>Name</th>
+        <th>Balance</th>
+        <th>AnimalType</th>
+        <th>IsGood?</th>
+    </tr>
+    <tr align="center" th:each="bankAccount : ${bankAccounts}">
+        <td th:text="${bankAccountStat.index}"></td>
+        <td th:class="${bankAccount.isKing()} ? isKing : isNotKing" th:text="${bankAccount.getName()}"></td>
+        <td th:text="${bankAccount.getBalance()}"></td>
+        <td th:text="${bankAccount.getAnimalType()}"></td>
+        <td th:text="${bankAccount.isGood()} ? 'Good' : 'Bad'"></td>
+    </tr>
+</table>
+<form action="#" th:action="@{/balanceUpdate}" method="post">
+    <label for="balance">Select the character of which you want to increase the balance</label>
+    <select id="balance" name="accountName">
+        <option th:each="bankAccount : ${bankAccounts}" th:text="${bankAccount.getName()}"></option>
+    </select>
+    <input type="submit" value="Update balance"/>
+</form>
+</body>
+</html>
