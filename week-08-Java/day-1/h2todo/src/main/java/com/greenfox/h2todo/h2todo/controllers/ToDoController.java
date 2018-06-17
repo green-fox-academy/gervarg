@@ -6,10 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-/*@RequestMapping(value = "/todo")*/
+@RequestMapping(value = "/todo")
 public class ToDoController {
 
   private final ToDoRepository toDoRepository;
@@ -24,10 +23,4 @@ public class ToDoController {
     model.addAttribute("toDos",  toDoRepository.findAll());
     return "todoslist";
   }
-
-/*  @GetMapping(value = {"/", "list"})
-  @ResponseBody
-  public String list(Model model) {
-    return "My first todo task";
-  }*/
 }
